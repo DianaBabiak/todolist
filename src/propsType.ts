@@ -1,5 +1,5 @@
-export interface TodoItemType{
-    id: number
+export interface TodoItemType {
+    id: string
     label: string
     checked: boolean
 
@@ -7,7 +7,7 @@ export interface TodoItemType{
 
 export interface TodolistType {
     title: string
-    id: number
+    id: string
     items: TodoItemType []
 
 }
@@ -15,5 +15,5 @@ export interface TodolistType {
 export enum TodoItemStatus {
     All = 'All',
     Active = 'Active',
-    Completed='Completed'
+    Completed = 'Completed'
 }

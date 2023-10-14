@@ -2,54 +2,56 @@ import './App.css';
 import {Todolist} from "./components/todolist/Todolist.tsx";
 import {useState} from "react";
 import {TodolistType} from "./propsType.ts";
+import {v1} from "uuid";
+import {AddField} from "./components/addField/AddField.tsx";
 
 function App() {
     const [data, setData] = useState<TodolistType[]>([
         {
             title: 'Programing',
-            id: 1,
+            id: v1(),
             items: [
-                {id: 1.1, label: 'JS', checked: true}, {id: 1.2, label: 'CSS', checked: false},
-                {id: 1.3, label: 'React', checked: true}
+                {id: v1(), label: 'JS', checked: true}, {id: v1(), label: 'CSS', checked: false},
+                {id: v1(), label: 'React', checked: true}
             ]
         },
         {
             title: 'Drinks',
-            id: 2,
+            id: v1(),
             items: [
-                {id: 2.1, label: 'Water', checked: false},
-                {id: 2.2, label: 'Coffee', checked: false},
-                {id: 2.3, label: 'Tea', checked: true}
+                {id: v1(), label: 'Water', checked: false},
+                {id: v1(), label: 'Coffee', checked: false},
+                {id: v1(), label: 'Tea', checked: true}
             ]
         },
         {
             title: 'Movies',
-            id: 3,
+            id: v1(),
             items: [
-                {id: 3.1, label: '1+1', checked: true},
-                {id: 3.2, label: 'Blond', checked: true},
-                {id: 3.3, label: 'Cars', checked: true}
+                {id: v1(), label: '1+1', checked: true},
+                {id: v1(), label: 'Blond', checked: true},
+                {id: v1(), label: 'Cars', checked: true}
             ]
         },
         {
             title: 'Family',
-            id: 4,
+            id: v1(),
             items: [
-                {id: 4.1, label: 'Dziana', checked: true},
-                {id: 4.2, label: 'Kiryl', checked: true},
-                {id: 4.3, label: 'Sofiya', checked: true}
+                {id: v1(), label: 'Dziana', checked: true},
+                {id: v1(), label: 'Kiryl', checked: true},
+                {id: v1(), label: 'Sofiya', checked: true}
             ]
         }])
 
-    const handlerDeleteTodolist = (idTodo: number) => {
+    const handlerDeleteTodolist = (idTodo: string) => {
         const updatedData = data.filter(todo => todo.id !== idTodo)
         setData(updatedData)
     }
 
-    const handlerDeleteTodoItem = (idTodo: number, idItem: number) => {
+    const handlerDeleteTodoItem = (idTodo: string, idItem: string) => {
         const updatedData = data.map((todo) => {
             if (todo.id === idTodo) {
-                todo.items = todo.items.filter(item=> item.id !== idItem);
+                todo.items = todo.items.filter(item => item.id !== idItem);
             }
             return todo
         })
@@ -57,9 +59,37 @@ function App() {
 
     }
 
+    const handlerAddTodo = (newTitle: string) => {
+        const newTodo = {
+            title: newTitle,
+            id: v1(),
+            items: []
+        }
+        const updatedData = [...data, newTodo]
+        setData(updatedData)
+    }
+
+    const handlerAddTodoItem = (idTodo: string, newTitle: string) => {
+        const updatedData = data.map((todo) => {
+            if (todo.id === idTodo) {
+                const newItem = {
+                    id: v1(),
+                    label: newTitle,
+                    checked: false
+                };
+                return {
+                    ...todo,
+                    items: [...todo.items, newItem]
+                };
+            }
+            return todo
+        });
+        setData(updatedData);
+    };
 
     return (
         <div className="App">
+            <AddField handlerAdd={handlerAddTodo} label={'Add'}/>
             {data.map((todo) => {
                 return (
                     <Todolist key={todo.id}
@@ -67,7 +97,8 @@ function App() {
                               id={todo.id}
                               items={todo.items}
                               handlerDeleteTodoItem={handlerDeleteTodoItem}
-                              handlerDeleteTodolist={handlerDeleteTodolist}/>
+                              handlerDeleteTodolist={handlerDeleteTodolist}
+                              handlerAddTodoItem={handlerAddTodoItem}/>
                 )
             })}
         </div>
