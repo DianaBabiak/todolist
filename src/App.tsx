@@ -1,8 +1,8 @@
 import './App.css';
+import {v1} from "uuid";
 import {Todolist} from "./components/todolist/Todolist.tsx";
 import {useState} from "react";
 import {TodolistType} from "./propsType.ts";
-import {v1} from "uuid";
 import {AddField} from "./components/addField/AddField.tsx";
 
 function App() {
