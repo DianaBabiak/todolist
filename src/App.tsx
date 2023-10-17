@@ -1,5 +1,5 @@
-import './App.css';
 import {v1} from "uuid";
+import './App.css';
 import {Todolist} from "./components/todolist/Todolist.tsx";
 import {useState} from "react";
 import {TodolistType} from "./propsType.ts";
