@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {ChangeEvent, useState, KeyboardEvent} from "react";
 
 
 interface AddFieldProps {
@@ -9,7 +9,7 @@ interface AddFieldProps {
 
 export const AddField = ({handlerAdd, label}: AddFieldProps) => {
     const [value, setValue] = useState('')
-    const onChangeValueInput = (e) => {
+    const onChangeValueInput = (e: ChangeEvent<HTMLInputElement>) => {
         const addedValue = e.target.value
         setValue(addedValue)
         console.log(value)
@@ -21,7 +21,7 @@ export const AddField = ({handlerAdd, label}: AddFieldProps) => {
         setValue('')
     }
 
-    const onKeyDownAdd =(e)=>{
+    const onKeyDownAdd =(e:KeyboardEvent<HTMLInputElement>)=>{
         if(e.key==='Enter'){
             handlerAdd?.(value)
             setValue('')
