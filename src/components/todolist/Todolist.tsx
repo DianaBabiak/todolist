@@ -10,6 +10,7 @@ interface TodoListProps extends TodolistType {
     handlerDeleteTodolist: (idTodo: string) => void
     handlerDeleteTodoItem: (idTodo: string, idItem: string) => void
     handlerAddTodoItem: (idTodo: string, newTitle: string) => void
+    onChangeCheckedHandler: (idTodo: string, newTitle: string) => void
 
 }
 
@@ -20,7 +21,8 @@ export const Todolist = ({
                              items,
                              handlerDeleteTodolist,
                              handlerDeleteTodoItem,
-                             handlerAddTodoItem
+                             handlerAddTodoItem,
+                             onChangeCheckedHandler
                          }: TodoListProps) => {
     const [status, setStatus] = useState(TodoItemStatus.All)
     const filterItems = items.filter((item) => {
@@ -42,12 +44,20 @@ export const Todolist = ({
         handlerAddTodoItem(id, newTitle)
     }
 
+const onChangeChecked = (idItem:string)=>{
+    onChangeCheckedHandler(id, idItem)
+}
 
+const onClickFilterButtonHandler = (activeStatus:TodoItemStatus)=>{
+    setStatus(activeStatus)
+
+
+}
     return (
         <div>
             <h3>{title}</h3>
             <button onClick={() => handlerDeleteTodolist(id)}>Delete</button>
-            <AddField handlerAdd={onAddTodoItem} label={'X'}/>
+            <AddField handlerAdd={onAddTodoItem} label={'+'}/>
             <ul>
                 {filterItems.map((item) => {
                     return (
@@ -55,24 +65,26 @@ export const Todolist = ({
                                   label={item.label}
                                   checked={item.checked}
                                   id={item.id}
-                                  handlerDeleteTodoItem={onDeleteTodoItem}/>
+                                  handlerDeleteTodoItem={onDeleteTodoItem}
+                                  onChangeCheckedHandler={onChangeChecked}
+                        />
                     )
                 })}
 
             </ul>
             <div>
                 <button onClick={() => {
-                    setStatus(TodoItemStatus.All)
+                    onClickFilterButtonHandler(TodoItemStatus.All)
                 }}
                         className={clsx(styles.button, {[styles.selectedButton]: status === TodoItemStatus.All})}>All
                 </button>
                 <button onClick={() => {
-                    setStatus(TodoItemStatus.Active)
+                    onClickFilterButtonHandler(TodoItemStatus.Active)
                 }}
                         className={clsx(styles.button, {[styles.selectedButton]: status === TodoItemStatus.Active})}>Active
                 </button>
                 <button onClick={() => {
-                    setStatus(TodoItemStatus.Completed)
+                    onClickFilterButtonHandler(TodoItemStatus.Completed)
                 }}
                         className={clsx(styles.button, {[styles.selectedButton]: status === TodoItemStatus.Completed})}>Completed
                 </button>

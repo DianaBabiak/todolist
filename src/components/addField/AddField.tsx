@@ -1,4 +1,5 @@
 import {ChangeEvent, useState, KeyboardEvent} from "react";
+import '../../App.css'
 
 
 interface AddFieldProps {
@@ -9,22 +10,35 @@ interface AddFieldProps {
 
 export const AddField = ({handlerAdd, label}: AddFieldProps) => {
     const [value, setValue] = useState('')
+    const [error, setError] = useState<null | string>(null)
     const onChangeValueInput = (e: ChangeEvent<HTMLInputElement>) => {
         const addedValue = e.target.value
         setValue(addedValue)
-        console.log(value)
+
+
 
     }
 
     const onClickAdd = () => {
-        handlerAdd?.(value)
-        setValue('')
-    }
-
-    const onKeyDownAdd =(e:KeyboardEvent<HTMLInputElement>)=>{
-        if(e.key==='Enter'){
+        if (value.trim() === '') {
+           setError('Title is required')
+            return
+        } else {
             handlerAdd?.(value)
             setValue('')
+        }
+    }
+
+    const onKeyDownAdd = (e: KeyboardEvent<HTMLInputElement>) => {
+        setError('')
+        if (e.key === 'Enter') {
+            if (value.trim() === '') {
+                setError('Title is required')
+                return
+            } else {
+                handlerAdd?.(value)
+                setValue('')
+            }
         }
     }
 
@@ -33,9 +47,11 @@ export const AddField = ({handlerAdd, label}: AddFieldProps) => {
         <div>
             <input value={value}
                    onChange={onChangeValueInput}
-                   onKeyDown={onKeyDownAdd}/>
+                   onKeyDown={onKeyDownAdd}
+            className={error? 'error' : ''}/>
 
             <button onClick={onClickAdd}>{label}</button>
+            {error && <div className= 'errorMessage'>{error}</div>}
         </div>
     )
 

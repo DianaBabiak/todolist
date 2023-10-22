@@ -87,6 +87,24 @@ function App() {
         setData(updatedData);
     };
 
+    const onChangeCheckedHandler = (idTodo: string, idItem: string) => {
+        const updatedData = data.map((todo) => {
+                if (idTodo === todo.id) {
+                    const item = todo.items.find(item => item.id === idItem)
+                    if (item) {
+                        item.checked = !item.checked
+                    }
+                    return {...todo, items: [...todo.items]}
+
+                }
+                return todo
+            }
+        )
+        setData(updatedData)
+
+
+    }
+
     return (
         <div className="App">
             <AddField handlerAdd={handlerAddTodo} label={'Add'}/>
@@ -98,7 +116,8 @@ function App() {
                               items={todo.items}
                               handlerDeleteTodoItem={handlerDeleteTodoItem}
                               handlerDeleteTodolist={handlerDeleteTodolist}
-                              handlerAddTodoItem={handlerAddTodoItem}/>
+                              handlerAddTodoItem={handlerAddTodoItem}
+                              onChangeCheckedHandler={onChangeCheckedHandler}/>
                 )
             })}
         </div>
