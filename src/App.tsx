@@ -2,121 +2,117 @@ import {v1} from "uuid";
 import './App.css';
 import {Todolist} from "./components/todolist/Todolist.tsx";
 import {useState} from "react";
-import {TodolistType} from "./propsType.ts";
+import {TodolistType, TodoTasksType} from "./propsType.ts";
 import {AddField} from "./components/addField/AddField.tsx";
 
 function App() {
-    const [data, setData] = useState<TodolistType[]>([
+
+    const idTodoOne = v1()
+    const idTodoTwo = v1()
+
+    const [todo, setTodo] = useState<TodolistType[]>([
         {
             title: 'Programing',
-            id: v1(),
-            items: [
-                {id: v1(), label: 'JS', checked: true}, {id: v1(), label: 'CSS', checked: false},
-                {id: v1(), label: 'React', checked: true}
-            ]
+            id: idTodoOne
         },
         {
             title: 'Drinks',
-            id: v1(),
-            items: [
-                {id: v1(), label: 'Water', checked: false},
-                {id: v1(), label: 'Coffee', checked: false},
-                {id: v1(), label: 'Tea', checked: true}
-            ]
-        },
-        {
-            title: 'Movies',
-            id: v1(),
-            items: [
-                {id: v1(), label: '1+1', checked: true},
-                {id: v1(), label: 'Blond', checked: true},
-                {id: v1(), label: 'Cars', checked: true}
-            ]
-        },
-        {
-            title: 'Family',
-            id: v1(),
-            items: [
-                {id: v1(), label: 'Dziana', checked: true},
-                {id: v1(), label: 'Kiryl', checked: true},
-                {id: v1(), label: 'Sofiya', checked: true}
-            ]
+            id: idTodoTwo
         }])
 
+    const [tasks, setTasks] = useState<TodoTasksType>({
+        [idTodoOne]: [
+            {id: v1(), label: 'JS', checked: true},
+            {id: v1(), label: 'CSS', checked: false},
+            {id: v1(), label: 'React', checked: true}
+        ],
+        [idTodoTwo]: [
+            {id: v1(), label: 'Water', checked: false},
+            {id: v1(), label: 'Coffee', checked: false},
+            {id: v1(), label: 'Tea', checked: true}
+        ]
+
+
+    })
+
     const handlerDeleteTodolist = (idTodo: string) => {
-        const updatedData = data.filter(todo => todo.id !== idTodo)
-        setData(updatedData)
+        const updatedTodo = todo.filter(todoItem => todoItem.id !== idTodo);
+        setTodo(updatedTodo);
+
+        const updatedTasks = { ...tasks };
+        delete updatedTasks[idTodo];
+
+        setTasks(updatedTasks);
     }
 
-    const handlerDeleteTodoItem = (idTodo: string, idItem: string) => {
-        const updatedData = data.map((todo) => {
-            if (todo.id === idTodo) {
-                todo.items = todo.items.filter(item => item.id !== idItem);
-            }
-            return todo
-        })
-        setData(updatedData)
+    const handlerDeleteTodoTask = (idTodo: string, idTask: string) => {
+        const updatedTasks = { ...tasks };
+        const needTasks = updatedTasks[idTodo];
+            updatedTasks[idTodo] = needTasks.filter((item) => item.id !== idTask);
+
+            setTasks(updatedTasks);
 
     }
+
+
 
     const handlerAddTodo = (newTitle: string) => {
+        const newIdTodo = v1()
         const newTodo = {
             title: newTitle,
-            id: v1(),
-            items: []
+            id: newIdTodo
         }
-        const updatedData = [...data, newTodo]
-        setData(updatedData)
+        const updatedTodo = [...todo, newTodo]
+        setTodo(updatedTodo)
+
+        const updateTasks = {
+            ...tasks,
+            [newIdTodo]:[]
+        }
+        setTasks(updateTasks)
     }
 
-    const handlerAddTodoItem = (idTodo: string, newTitle: string) => {
-        const updatedData = data.map((todo) => {
-            if (todo.id === idTodo) {
-                const newItem = {
-                    id: v1(),
-                    label: newTitle,
-                    checked: false
-                };
-                return {
-                    ...todo,
-                    items: [...todo.items, newItem]
-                };
-            }
-            return todo
-        });
-        setData(updatedData);
-    };
+    const handlerAddTodoTask = (idTodo: string, newTitle: string) => {
+        const newTask = {
+            id: v1(),
+            label: newTitle,
+            checked: false
+        };
+        const updatedTasks = { ...tasks };
+        const todoTasks = updatedTasks[idTodo];
+        updatedTasks[idTodo] = [...todoTasks, newTask];
 
-    const onChangeCheckedHandler = (idTodo: string, idItem: string) => {
-        const updatedData = data.map((todo) => {
-                if (idTodo === todo.id) {
-                    const item = todo.items.find(item => item.id === idItem)
-                    if (item) {
-                        item.checked = !item.checked
-                    }
-                    return {...todo, items: [...todo.items]}
+        setTasks(updatedTasks);
+    }
 
-                }
-                return todo
-            }
-        )
-        setData(updatedData)
 
+
+    const onChangeCheckedHandler = (idTodo: string, idTask: string) => {
+       const updatedTasks = {...tasks}
+        const todoTasks = updatedTasks[idTodo];
+        const copyTasks = [...todoTasks]
+        const task = copyTasks.find((task)=>idTask===task.id)
+        if (task){
+            task.checked = !task.checked
+        }
+
+        updatedTasks[idTodo] = copyTasks;
+        setTasks(updatedTasks);
 
     }
 
     return (
         <div className="App">
             <AddField handlerAdd={handlerAddTodo} label={'Add'}/>
-            {data.map((todo) => {
+            {todo.map((todo) => {
                 return (
                     <Todolist key={todo.id}
                               title={todo.title}
                               id={todo.id}
-                              items={todo.items}
-                              handlerDeleteTodoItem={handlerDeleteTodoItem}
+                              tasks={tasks[todo.id]}
+                              handlerAddTodoTask={handlerAddTodoTask}
                               handlerDeleteTodolist={handlerDeleteTodolist}
-                              handlerAddTodoItem={handlerAddTodoItem}
+                              handlerDeleteTodoTask={handlerDeleteTodoTask}
                               onChangeCheckedHandler={onChangeCheckedHandler}/>
                 )
             })}

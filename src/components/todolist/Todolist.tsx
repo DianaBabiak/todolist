@@ -1,15 +1,16 @@
-import {TodoItemStatus, TodolistType} from "../../propsType.ts";
-import {TodoItem} from "../todoItem/TodoItem.tsx";
+import {TodoItemStatus, TodolistType, TodoTaskType} from "../../propsType.ts";
+import {TodoTask} from "../todoTask/TodoTask.tsx";
 import {useState} from "react";
-import {clsx} from 'clsx';
+import clsx from 'clsx';
 import styles from './Todolist.module.scss'
 import {AddField} from "../addField/AddField.tsx";
 
 
 interface TodoListProps extends TodolistType {
+    tasks:TodoTaskType[]
     handlerDeleteTodolist: (idTodo: string) => void
-    handlerDeleteTodoItem: (idTodo: string, idItem: string) => void
-    handlerAddTodoItem: (idTodo: string, newTitle: string) => void
+    handlerDeleteTodoTask: (idTodo: string, idTask: string) => void
+    handlerAddTodoTask: (idTodo: string, newTitle: string) => void
     onChangeCheckedHandler: (idTodo: string, newTitle: string) => void
 
 }
@@ -18,14 +19,14 @@ interface TodoListProps extends TodolistType {
 export const Todolist = ({
                              title,
                              id,
-                             items,
+                             tasks,
                              handlerDeleteTodolist,
-                             handlerDeleteTodoItem,
-                             handlerAddTodoItem,
+                             handlerDeleteTodoTask,
+                             handlerAddTodoTask,
                              onChangeCheckedHandler
                          }: TodoListProps) => {
     const [status, setStatus] = useState(TodoItemStatus.All)
-    const filterItems = items.filter((item) => {
+    const filterTasks = tasks.filter((item) => {
         if (status === TodoItemStatus.All) {
             return item
         }
@@ -36,40 +37,40 @@ export const Todolist = ({
     })
 
 
-    const onDeleteTodoItem = (idItem: string) => {
-        handlerDeleteTodoItem(id, idItem)
+    const onDeleteTodoTask = (idTask: string) => {
+        handlerDeleteTodoTask(id, idTask)
     }
 
     const onAddTodoItem = (newTitle: string) => {
-        handlerAddTodoItem(id, newTitle)
+        handlerAddTodoTask(id, newTitle)
     }
 
-const onChangeChecked = (idItem:string)=>{
-    onChangeCheckedHandler(id, idItem)
-}
+    const onChangeChecked = (idItem: string) => {
+        onChangeCheckedHandler(id, idItem)
+    }
 
-const onClickFilterButtonHandler = (activeStatus:TodoItemStatus)=>{
-    setStatus(activeStatus)
+    const onClickFilterButtonHandler = (activeStatus: TodoItemStatus) => {
+        setStatus(activeStatus)
 
 
-}
+    }
     return (
         <div>
             <h3>{title}</h3>
             <button onClick={() => handlerDeleteTodolist(id)}>Delete</button>
             <AddField handlerAdd={onAddTodoItem} label={'+'}/>
             <ul>
-                {filterItems.map((item) => {
+                {filterTasks.length ? filterTasks.map((item) => {
                     return (
-                        <TodoItem key={item.id}
+                        <TodoTask key={item.id}
                                   label={item.label}
                                   checked={item.checked}
                                   id={item.id}
-                                  handlerDeleteTodoItem={onDeleteTodoItem}
+                                  handlerDeleteTodoTask={onDeleteTodoTask}
                                   onChangeCheckedHandler={onChangeChecked}
                         />
                     )
-                })}
+                }) : <p> Your tasks are empty </p>}
 
             </ul>
             <div>
