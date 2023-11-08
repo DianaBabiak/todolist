@@ -36,24 +36,17 @@ function App() {
     })
 
     const handlerDeleteTodolist = (idTodo: string) => {
-        const updatedTodo = todo.filter(todoItem => todoItem.id !== idTodo);
-        setTodo(updatedTodo);
+        setTodo(todo.filter(todoItem => todoItem.id !== idTodo))
 
-        const updatedTasks = { ...tasks };
+        const updatedTasks = {...tasks};
         delete updatedTasks[idTodo];
 
         setTasks(updatedTasks);
     }
 
     const handlerDeleteTodoTask = (idTodo: string, idTask: string) => {
-        const updatedTasks = { ...tasks };
-        const needTasks = updatedTasks[idTodo];
-            updatedTasks[idTodo] = needTasks.filter((item) => item.id !== idTask);
-
-            setTasks(updatedTasks);
-
+        setTasks({...tasks, [idTodo]: tasks[idTodo].filter(item => item.id !== idTask)})
     }
-
 
 
     const handlerAddTodo = (newTitle: string) => {
@@ -62,14 +55,12 @@ function App() {
             title: newTitle,
             id: newIdTodo
         }
-        const updatedTodo = [...todo, newTodo]
-        setTodo(updatedTodo)
+        setTodo([...todo, newTodo])
 
-        const updateTasks = {
+        setTasks({
             ...tasks,
-            [newIdTodo]:[]
-        }
-        setTasks(updateTasks)
+            [newIdTodo]: []
+        })
     }
 
     const handlerAddTodoTask = (idTodo: string, newTitle: string) => {
@@ -78,26 +69,30 @@ function App() {
             label: newTitle,
             checked: false
         };
-        const updatedTasks = { ...tasks };
-        const todoTasks = updatedTasks[idTodo];
-        updatedTasks[idTodo] = [...todoTasks, newTask];
 
-        setTasks(updatedTasks);
+        setTasks({...tasks, [idTodo]: [...tasks[idTodo], newTask]});
     }
 
 
-
     const onChangeCheckedHandler = (idTodo: string, idTask: string) => {
-       const updatedTasks = {...tasks}
-        const todoTasks = updatedTasks[idTodo];
-        const copyTasks = [...todoTasks]
-        const task = copyTasks.find((task)=>idTask===task.id)
-        if (task){
-            task.checked = !task.checked
-        }
 
-        updatedTasks[idTodo] = copyTasks;
-        setTasks(updatedTasks);
+        setTasks({
+            ...tasks, [idTodo]: tasks[idTodo].map(task => idTask === task.id
+                ? {...task, checked: !task.checked}
+                : task)
+        });
+
+    }
+    const onEditTodo = (idTodo: string, newTitle: string) => {
+        setTodo(todo.map(todo => todo.id === idTodo ? {...todo, title: newTitle} : todo))
+    }
+    const onEditTodoItem = (idTodo: string, idTask: string, newTitle: string) => {
+        setTasks({
+            ...tasks,
+            [idTodo]: tasks[idTodo].map(task => idTask === task.id
+                ? {...task, label: newTitle}
+                : task)
+        })
 
     }
 
@@ -113,7 +108,9 @@ function App() {
                               handlerAddTodoTask={handlerAddTodoTask}
                               handlerDeleteTodolist={handlerDeleteTodolist}
                               handlerDeleteTodoTask={handlerDeleteTodoTask}
-                              onChangeCheckedHandler={onChangeCheckedHandler}/>
+                              onChangeCheckedHandler={onChangeCheckedHandler}
+                              onEditTodo={onEditTodo}
+                              onEditTodoItem={onEditTodoItem}/>
                 )
             })}
         </div>

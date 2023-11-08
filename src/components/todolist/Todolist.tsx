@@ -4,14 +4,17 @@ import {useState} from "react";
 import clsx from 'clsx';
 import styles from './Todolist.module.scss'
 import {AddField} from "../addField/AddField.tsx";
+import {EditableSpan} from "../editableSpan/EditableSpan.tsx";
 
 
 interface TodoListProps extends TodolistType {
-    tasks:TodoTaskType[]
+    tasks: TodoTaskType[]
     handlerDeleteTodolist: (idTodo: string) => void
     handlerDeleteTodoTask: (idTodo: string, idTask: string) => void
     handlerAddTodoTask: (idTodo: string, newTitle: string) => void
     onChangeCheckedHandler: (idTodo: string, newTitle: string) => void
+    onEditTodoItem: (idTodo: string, idTask: string, newTitle: string) => void
+    onEditTodo: (idTodo: string, newTitle: string) => void
 
 }
 
@@ -23,7 +26,9 @@ export const Todolist = ({
                              handlerDeleteTodolist,
                              handlerDeleteTodoTask,
                              handlerAddTodoTask,
-                             onChangeCheckedHandler
+                             onChangeCheckedHandler,
+                             onEditTodo,
+                             onEditTodoItem
                          }: TodoListProps) => {
     const [status, setStatus] = useState(TodoItemStatus.All)
     const filterTasks = tasks.filter((item) => {
@@ -54,9 +59,16 @@ export const Todolist = ({
 
 
     }
+
+    const onEditTodoHandler = (newTitle:string)=>{
+        onEditTodo(id, newTitle)
+    }
+    const onEditTodoItemHandler = (idTask: string, newLabel: string) => {
+        onEditTodoItem(id, idTask, newLabel)
+    }
     return (
         <div>
-            <h3>{title}</h3>
+            <EditableSpan label={title} onEditHandler={onEditTodoHandler}/>
             <button onClick={() => handlerDeleteTodolist(id)}>Delete</button>
             <AddField handlerAdd={onAddTodoItem} label={'+'}/>
             <ul>
@@ -68,6 +80,7 @@ export const Todolist = ({
                                   id={item.id}
                                   handlerDeleteTodoTask={onDeleteTodoTask}
                                   onChangeCheckedHandler={onChangeChecked}
+                                  onEditTodoItem={onEditTodoItemHandler}
                         />
                     )
                 }) : <p> Your tasks are empty </p>}
