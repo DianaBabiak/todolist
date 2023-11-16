@@ -1,6 +1,18 @@
-.button{
+.wrapper{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
 
-  &.selectedButton{
-    background-color: gold;
-  }
+
+}
+.titleWrapper{
+  display: flex;
+  justify-content: space-between;
+  gap:16px;
+}
+
+.wrapperButtons{
+  display: flex;
+  justify-content: center;
 }

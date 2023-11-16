@@ -4,6 +4,11 @@ import {Todolist} from "./components/todolist/Todolist.tsx";
 import {useState} from "react";
 import {TodolistType, TodoTasksType} from "./propsType.ts";
 import {AddField} from "./components/addField/AddField.tsx";
+import {AppBarComponent} from "./components/appBarComponent/AppBarComponent.tsx";
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+
 
 function App() {
 
@@ -12,7 +17,7 @@ function App() {
 
     const [todo, setTodo] = useState<TodolistType[]>([
         {
-            title: 'Programing',
+            title: 'Programming',
             id: idTodoOne
         },
         {
@@ -73,7 +78,6 @@ function App() {
         setTasks({...tasks, [idTodo]: [...tasks[idTodo], newTask]});
     }
 
-
     const onChangeCheckedHandler = (idTodo: string, idTask: string) => {
 
         setTasks({
@@ -98,21 +102,31 @@ function App() {
 
     return (
         <div className="App">
-            <AddField handlerAdd={handlerAddTodo} label={'Add'}/>
-            {todo.map((todo) => {
-                return (
-                    <Todolist key={todo.id}
-                              title={todo.title}
-                              id={todo.id}
-                              tasks={tasks[todo.id]}
-                              handlerAddTodoTask={handlerAddTodoTask}
-                              handlerDeleteTodolist={handlerDeleteTodolist}
-                              handlerDeleteTodoTask={handlerDeleteTodoTask}
-                              onChangeCheckedHandler={onChangeCheckedHandler}
-                              onEditTodo={onEditTodo}
-                              onEditTodoItem={onEditTodoItem}/>
-                )
-            })}
+            <AppBarComponent/>
+            <Container maxWidth='lg' style={{padding: '20px 0 0'}}>
+                <AddField handlerAdd={handlerAddTodo}/>
+                <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                    {todo.map((todo) => {
+                        return (
+                            <Grid item style={{margin: '40px 0 0'}} xs={4}>
+                                <Paper elevation={3} >
+                                <Todolist key={todo.id}
+                                          title={todo.title}
+                                          id={todo.id}
+                                          tasks={tasks[todo.id]}
+                                          handlerAddTodoTask={handlerAddTodoTask}
+                                          handlerDeleteTodolist={handlerDeleteTodolist}
+                                          handlerDeleteTodoTask={handlerDeleteTodoTask}
+                                          onChangeCheckedHandler={onChangeCheckedHandler}
+                                          onEditTodo={onEditTodo}
+                                          onEditTodoItem={onEditTodoItem}/>
+                                    </Paper>
+                            </Grid>
+                        )
+                    })}
+                </Grid>
+            </Container>
+
         </div>
     );
 }

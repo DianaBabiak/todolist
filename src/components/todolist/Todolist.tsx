@@ -1,10 +1,13 @@
 import {TodoItemStatus, TodolistType, TodoTaskType} from "../../propsType.ts";
 import {TodoTask} from "../todoTask/TodoTask.tsx";
 import {useState} from "react";
-import clsx from 'clsx';
-import styles from './Todolist.module.scss'
+
 import {AddField} from "../addField/AddField.tsx";
 import {EditableSpan} from "../editableSpan/EditableSpan.tsx";
+import FilterButton from "../filterButton/FilterButton.tsx";
+import {Button} from "@mui/material";
+import {Delete} from "@mui/icons-material";
+import style from "./Todolist.module.scss"
 
 
 interface TodoListProps extends TodolistType {
@@ -41,7 +44,6 @@ export const Todolist = ({
 
     })
 
-
     const onDeleteTodoTask = (idTask: string) => {
         handlerDeleteTodoTask(id, idTask)
     }
@@ -60,17 +62,21 @@ export const Todolist = ({
 
     }
 
-    const onEditTodoHandler = (newTitle:string)=>{
+    const onEditTodoHandler = (newTitle: string) => {
         onEditTodo(id, newTitle)
     }
     const onEditTodoItemHandler = (idTask: string, newLabel: string) => {
         onEditTodoItem(id, idTask, newLabel)
     }
     return (
-        <div>
-            <EditableSpan label={title} onEditHandler={onEditTodoHandler}/>
-            <button onClick={() => handlerDeleteTodolist(id)}>Delete</button>
-            <AddField handlerAdd={onAddTodoItem} label={'+'}/>
+        <div className={style.wrapper}>
+            <div className={style.titleWrapper}>
+                <EditableSpan label={title} onEditHandler={onEditTodoHandler} variantTypography={"h4"}/>
+                <Button size='small' onClick={() => handlerDeleteTodolist(id)} variant="outlined" startIcon={<Delete />}>
+                    Delete
+                </Button>
+            </div>
+            <AddField handlerAdd={onAddTodoItem} />
             <ul>
                 {filterTasks.length ? filterTasks.map((item) => {
                     return (
@@ -83,25 +89,25 @@ export const Todolist = ({
                                   onEditTodoItem={onEditTodoItemHandler}
                         />
                     )
-                }) : <p> Your tasks are empty </p>}
+                }) : <p>Your tasks are empty </p>}
 
             </ul>
-            <div>
-                <button onClick={() => {
-                    onClickFilterButtonHandler(TodoItemStatus.All)
-                }}
-                        className={clsx(styles.button, {[styles.selectedButton]: status === TodoItemStatus.All})}>All
-                </button>
-                <button onClick={() => {
-                    onClickFilterButtonHandler(TodoItemStatus.Active)
-                }}
-                        className={clsx(styles.button, {[styles.selectedButton]: status === TodoItemStatus.Active})}>Active
-                </button>
-                <button onClick={() => {
-                    onClickFilterButtonHandler(TodoItemStatus.Completed)
-                }}
-                        className={clsx(styles.button, {[styles.selectedButton]: status === TodoItemStatus.Completed})}>Completed
-                </button>
+            <div className={style.wrapperButtons}>
+                <FilterButton
+                    status={TodoItemStatus.All}
+                    onClickHandler={onClickFilterButtonHandler}
+                    isSelected={status === TodoItemStatus.All}
+                />
+                <FilterButton
+                    status={TodoItemStatus.Active}
+                    onClickHandler={onClickFilterButtonHandler}
+                    isSelected={status === TodoItemStatus.Active}
+                />
+                <FilterButton
+                    status={TodoItemStatus.Completed}
+                    onClickHandler={onClickFilterButtonHandler}
+                    isSelected={status === TodoItemStatus.Completed}
+                />
             </div>
         </div>
 

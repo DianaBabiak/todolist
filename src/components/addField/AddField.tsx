@@ -1,14 +1,17 @@
 import {ChangeEvent, useState, KeyboardEvent} from "react";
 import '../../App.css'
+import {IconButton, TextField} from "@mui/material";
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import style from "./AddField.module.scss"
 
 
 interface AddFieldProps {
     handlerAdd: (newTitle: string) => void
-    label: string
+
 }
 
 
-export const AddField = ({handlerAdd, label}: AddFieldProps) => {
+export const AddField = ({handlerAdd}: AddFieldProps) => {
     const [value, setValue] = useState('')
     const [error, setError] = useState<null | string>(null)
     const onChangeValueInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -16,12 +19,11 @@ export const AddField = ({handlerAdd, label}: AddFieldProps) => {
         setValue(addedValue)
 
 
-
     }
 
     const onClickAdd = () => {
         if (value.trim() === '') {
-           setError('Title is required')
+            setError('Title is required')
             return
         } else {
             handlerAdd?.(value)
@@ -44,14 +46,19 @@ export const AddField = ({handlerAdd, label}: AddFieldProps) => {
 
 
     return (
-        <div>
-            <input value={value}
-                   onChange={onChangeValueInput}
-                   onKeyDown={onKeyDownAdd}
-            className={error? 'error' : ''}/>
+        <div className={style.wrapper}>
+            <TextField id="outlined-basic" label="Enter a title..."
+                       variant="outlined"
+                       value={value}
+                       onChange={onChangeValueInput}
+                       onKeyDown={onKeyDownAdd}
+                       error={!!error}
+                       helperText={error}
+            />
 
-            <button onClick={onClickAdd}>{label}</button>
-            {error && <div className= 'errorMessage'>{error}</div>}
+            <IconButton  aria-label="add" size="large" onClick={onClickAdd}>
+                <AddBoxIcon fontSize="large" color="primary"/>
+            </IconButton>
         </div>
     )
 

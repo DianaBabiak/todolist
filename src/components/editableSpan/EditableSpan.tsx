@@ -1,11 +1,13 @@
 import {ChangeEvent, KeyboardEvent, useState} from "react";
+import {Typography, TypographyProps} from "@mui/material";
 
 interface EditableSpanProps {
     label: string
     onEditHandler: (newLabel: string) => void
+    variantTypography:TypographyProps['variant']
 }
 
-export const EditableSpan = ({label, onEditHandler}: EditableSpanProps) => {
+export const EditableSpan = ({label, onEditHandler, variantTypography}: EditableSpanProps) => {
     const [editMode, setEditMode] = useState(false)
     const [editLabel, setEditLabel] = useState('')
     const [error, setError] = useState<null | string>(null)
@@ -42,18 +44,28 @@ export const EditableSpan = ({label, onEditHandler}: EditableSpanProps) => {
 
 
     return (
-        <>
-            {editMode
-                ? <input value={editLabel}
-                         autoFocus
-                         onBlur={onBlurHandler}
-                         onChange={onChangeLabelHandler}
-                         onKeyDown={onKeyDownEdit}
-                         className={error ? 'error' : ''}/>
-                : <span onDoubleClick={onDoubleClickHandler}>{label}</span>}
-            {error && <div className='errorMessage'>{error}</div>}
-        </>
+
+            <>
+                {editMode ? (
+                    <input
+                        value={editLabel}
+                        autoFocus
+                        onBlur={onBlurHandler}
+                        onChange={onChangeLabelHandler}
+                        onKeyDown={onKeyDownEdit}
+                        className={error ? 'error' : ''}
+                    />
+                ) : (
+                    <>
+                        <Typography onDoubleClick={onDoubleClickHandler} variant={variantTypography} gutterBottom>
+                            {label}
+                        </Typography>
+                        {error && <div className='errorMessage'>{error}</div>}
+                    </>
+                )}
+            </>
+        );
 
 
-    )
+
 }
