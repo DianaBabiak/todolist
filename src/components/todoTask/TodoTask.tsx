@@ -1,8 +1,9 @@
 import {TodoTaskType} from "../../propsType.ts";
 import '../../App.css'
 import {EditableSpan} from "../editableSpan/EditableSpan.tsx";
-import {Checkbox, IconButton} from "@mui/material";
-import {Delete} from "@mui/icons-material";
+import Checkbox from '@mui/material/Checkbox';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 
@@ -26,7 +27,7 @@ const onEditTodoItemHandler = (newLabel:string)=>{
             <Checkbox checked={checked} onChange={onChangeChecked} defaultChecked color="secondary" />
             <EditableSpan label={label} onEditHandler={onEditTodoItemHandler} variantTypography={"h6"}/>
             <IconButton aria-label="delete" size="large">
-                <Delete fontSize="small" onClick={() => handlerDeleteTodoTask(id)}/>
+                <DeleteIcon fontSize="small" onClick={() => handlerDeleteTodoTask(id)}/>
             </IconButton>
 
 

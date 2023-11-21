@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1700608392017" clover="3.2.0">
+  <project timestamp="1700608392017" name="All files">
+    <metrics statements="19" coveredstatements="8" conditionals="6" coveredconditionals="3" methods="6" coveredmethods="2" elements="31" coveredelements="13" complexity="0" loc="19" ncloc="19" packages="1" files="1" classes="1"/>
+    <file name="todolistReducer.ts" path="/Users/kiryl/Documents/my_projects/diana/todolist/src/state/todolistReducer.ts">
+      <metrics statements="19" coveredstatements="8" conditionals="6" coveredconditionals="3" methods="6" coveredmethods="2"/>
+      <line num="2" count="1" type="stmt"/>
+      <line num="6" count="1" type="stmt"/>
+      <line num="7" count="1" type="cond" truecount="1" falsecount="3"/>
+      <line num="9" count="0" type="stmt"/>
+      <line num="10" count="0" type="stmt"/>
+      <line num="11" count="0" type="stmt"/>
+      <line num="15" count="0" type="stmt"/>
+      <line num="16" count="0" type="stmt"/>
+      <line num="19" count="0" type="stmt"/>
+      <line num="20" count="0" type="stmt"/>
+      <line num="23" count="1" type="stmt"/>
+      <line num="24" count="2" type="cond" truecount="2" falsecount="0"/>
+      <line num="29" count="0" type="stmt"/>
+      <line num="37" count="1" type="stmt"/>
+      <line num="38" count="0" type="stmt"/>
+      <line num="47" count="1" type="stmt"/>
+      <line num="48" count="0" type="stmt"/>
+      <line num="58" count="1" type="stmt"/>
+      <line num="59" count="0" type="stmt"/>
+    </file>
+  </project>
+</coverage>

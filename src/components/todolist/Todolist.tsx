@@ -1,12 +1,13 @@
 import {TodoItemStatus, TodolistType, TodoTaskType} from "../../propsType.ts";
 import {TodoTask} from "../todoTask/TodoTask.tsx";
 import {useState} from "react";
-
+import Button from '@mui/material/Button';
 import {AddField} from "../addField/AddField.tsx";
 import {EditableSpan} from "../editableSpan/EditableSpan.tsx";
 import FilterButton from "../filterButton/FilterButton.tsx";
-import {Button} from "@mui/material";
-import {Delete} from "@mui/icons-material";
+import DeleteIcon from '@mui/icons-material/Delete';
+
+
 import style from "./Todolist.module.scss"
 
 
@@ -72,7 +73,7 @@ export const Todolist = ({
         <div className={style.wrapper}>
             <div className={style.titleWrapper}>
                 <EditableSpan label={title} onEditHandler={onEditTodoHandler} variantTypography={"h4"}/>
-                <Button size='small' onClick={() => handlerDeleteTodolist(id)} variant="outlined" startIcon={<Delete />}>
+                <Button size='small' onClick={() => handlerDeleteTodolist(id)} variant="outlined" startIcon={<DeleteIcon />}>
                     Delete
                 </Button>
             </div>

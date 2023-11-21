@@ -1,7 +1,8 @@
 import {ChangeEvent, useState, KeyboardEvent} from "react";
 import '../../App.css'
-import {IconButton, TextField} from "@mui/material";
+import TextField from '@mui/material/TextField';
 import AddBoxIcon from '@mui/icons-material/AddBox';
+import IconButton from '@mui/material/IconButton';
 import style from "./AddField.module.scss"
 
 

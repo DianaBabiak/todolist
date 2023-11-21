@@ -1,13 +1,21 @@
 import {v1} from "uuid";
 import './App.css';
 import {Todolist} from "./components/todolist/Todolist.tsx";
-import {useState} from "react";
-import {TodolistType, TodoTasksType} from "./propsType.ts";
+import {useReducer} from "react";
 import {AddField} from "./components/addField/AddField.tsx";
 import {AppBarComponent} from "./components/appBarComponent/AppBarComponent.tsx";
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import {addTodolistCA, deleteTodolistCA, editTodolistCA, todolistReducer} from "./state/todolistReducer.ts";
+import {
+    addTaskCA,
+    addTodoCA,
+    changeCheckedTaskCA,
+    deleteTaskCA,
+    deleteTodoCA, editTitleTask,
+    tasksReducer
+} from "./state/tasksReduser.ts";
 
 
 function App() {
@@ -15,7 +23,7 @@ function App() {
     const idTodoOne = v1()
     const idTodoTwo = v1()
 
-    const [todo, setTodo] = useState<TodolistType[]>([
+    const [todo, dispatchTodo] = useReducer(todolistReducer, [
         {
             title: 'Programming',
             id: idTodoOne
@@ -25,7 +33,7 @@ function App() {
             id: idTodoTwo
         }])
 
-    const [tasks, setTasks] = useState<TodoTasksType>({
+    const [tasks, dispatchTasks] = useReducer(tasksReducer, {
         [idTodoOne]: [
             {id: v1(), label: 'JS', checked: true},
             {id: v1(), label: 'CSS', checked: false},
@@ -41,62 +49,36 @@ function App() {
     })
 
     const handlerDeleteTodolist = (idTodo: string) => {
-        setTodo(todo.filter(todoItem => todoItem.id !== idTodo))
-
-        const updatedTasks = {...tasks};
-        delete updatedTasks[idTodo];
-
-        setTasks(updatedTasks);
+        dispatchTodo(deleteTodolistCA(idTodo))
+        dispatchTasks(deleteTodoCA(idTodo))
     }
 
     const handlerDeleteTodoTask = (idTodo: string, idTask: string) => {
-        setTasks({...tasks, [idTodo]: tasks[idTodo].filter(item => item.id !== idTask)})
+        dispatchTasks(deleteTaskCA(idTodo, idTask))
     }
 
 
     const handlerAddTodo = (newTitle: string) => {
-        const newIdTodo = v1()
-        const newTodo = {
-            title: newTitle,
-            id: newIdTodo
+        const callback = (newTodoId: string) => {
+            dispatchTasks(addTodoCA(newTodoId))
         }
-        setTodo([...todo, newTodo])
 
-        setTasks({
-            ...tasks,
-            [newIdTodo]: []
-        })
+        dispatchTodo(addTodolistCA(newTitle, callback))
     }
 
     const handlerAddTodoTask = (idTodo: string, newTitle: string) => {
-        const newTask = {
-            id: v1(),
-            label: newTitle,
-            checked: false
-        };
+        dispatchTasks(addTaskCA(idTodo, newTitle))
 
-        setTasks({...tasks, [idTodo]: [...tasks[idTodo], newTask]});
     }
 
     const onChangeCheckedHandler = (idTodo: string, idTask: string) => {
-
-        setTasks({
-            ...tasks, [idTodo]: tasks[idTodo].map(task => idTask === task.id
-                ? {...task, checked: !task.checked}
-                : task)
-        });
-
+        dispatchTasks(changeCheckedTaskCA(idTodo, idTask))
     }
     const onEditTodo = (idTodo: string, newTitle: string) => {
-        setTodo(todo.map(todo => todo.id === idTodo ? {...todo, title: newTitle} : todo))
+        dispatchTodo(editTodolistCA(idTodo, newTitle))
     }
     const onEditTodoItem = (idTodo: string, idTask: string, newTitle: string) => {
-        setTasks({
-            ...tasks,
-            [idTodo]: tasks[idTodo].map(task => idTask === task.id
-                ? {...task, label: newTitle}
-                : task)
-        })
+        dispatchTasks(editTitleTask(idTodo,idTask,newTitle))
 
     }
 
@@ -105,22 +87,22 @@ function App() {
             <AppBarComponent/>
             <Container maxWidth='lg' style={{padding: '20px 0 0'}}>
                 <AddField handlerAdd={handlerAddTodo}/>
-                <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                <Grid container rowSpacing={1} columnSpacing={{xs: 1, sm: 2, md: 3}}>
                     {todo.map((todo) => {
                         return (
                             <Grid item style={{margin: '40px 0 0'}} xs={4}>
-                                <Paper elevation={3} >
-                                <Todolist key={todo.id}
-                                          title={todo.title}
-                                          id={todo.id}
-                                          tasks={tasks[todo.id]}
-                                          handlerAddTodoTask={handlerAddTodoTask}
-                                          handlerDeleteTodolist={handlerDeleteTodolist}
-                                          handlerDeleteTodoTask={handlerDeleteTodoTask}
-                                          onChangeCheckedHandler={onChangeCheckedHandler}
-                                          onEditTodo={onEditTodo}
-                                          onEditTodoItem={onEditTodoItem}/>
-                                    </Paper>
+                                <Paper elevation={3}>
+                                    <Todolist key={todo.id}
+                                              title={todo.title}
+                                              id={todo.id}
+                                              tasks={tasks[todo.id]}
+                                              handlerAddTodoTask={handlerAddTodoTask}
+                                              handlerDeleteTodolist={handlerDeleteTodolist}
+                                              handlerDeleteTodoTask={handlerDeleteTodoTask}
+                                              onChangeCheckedHandler={onChangeCheckedHandler}
+                                              onEditTodo={onEditTodo}
+                                              onEditTodoItem={onEditTodoItem}/>
+                                </Paper>
                             </Grid>
                         )
                     })}

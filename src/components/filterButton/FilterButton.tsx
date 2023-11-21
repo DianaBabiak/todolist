@@ -1,6 +1,6 @@
 import React from 'react';
 import {TodoItemStatus} from "../../propsType.ts";
-import {Button} from "@mui/material";
+import Button from '@mui/material/Button';
 
 
 interface FilterButtonProps {
