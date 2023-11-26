@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">52% </span>
+                <span class="strong">81.81% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>13/25</span>
+                <span class='fraction'>18/22</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">83.33% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>5/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">50% </span>
-                <span class="quiet">Branches</span>
+                <span class="quiet">Functions</span>
                 <span class='fraction'>3/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
-                <span class="quiet">Functions</span>
-                <span class='fraction'>2/6</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">42.1% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>8/19</span>
+                <span class='fraction'>12/16</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -124,42 +124,30 @@
 <a name='L59'></a><a href='#L59'>59</a>
 <a name='L60'></a><a href='#L60'>60</a>
 <a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L62'></a><a href='#L62'>62</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -204,26 +192,21 @@ export type ActionType = AddTodolistCAType | DeleteTodolistCAType | EditTodolist
 &nbsp;
 export const todolistReducer = (state: TodolistType[], action: ActionType): TodolistType[] =&gt; {
     switch (action.type) {
-<span class="branch-0 cbranch-no" title="branch not covered" >        case "ADD TODO": {</span>
-            const {newTitle, callback} = <span class="cstat-no" title="statement not covered" >action.payload as AddTodolistCAType["payload"]</span>
-            const newIdTodo = <span class="cstat-no" title="statement not covered" >v1()</span>
-            const newTodo = <span class="cstat-no" title="statement not covered" >{</span>
-                title: newTitle,
+        case "ADD TODO": {
+            const newIdTodo = v1()
+            const newTodo = {
+                title: action.payload.newTitle,
                 id: newIdTodo
             }
-<span class="cstat-no" title="statement not covered" >            callback(newIdTodo)</span>
-<span class="cstat-no" title="statement not covered" >            return [...state, newTodo]</span>
+            action.payload.callback(newIdTodo)
+            return [...state, newTodo]
         }
-<span class="branch-1 cbranch-no" title="branch not covered" >        case "DELETE TODO": {</span>
-            const {idTodo} = <span class="cstat-no" title="statement not covered" >action.payload as DeleteTodolistCAType["payload"]</span>
-<span class="cstat-no" title="statement not covered" >            return state.filter(<span class="fstat-no" title="function not covered" >todo </span>=&gt; <span class="cstat-no" title="statement not covered" >todo.id !== idTodo)</span>;</span>
+        case "DELETE TODO": {
+            return state.filter(todo =&gt; todo.id !== action.payload.idTodo);
         }
         case "EDIT TODO TITLE": {
-            const {idTodo, newTitle} = action.payload as EditTodolistCAType["payload"]
-            return state.map(todo =&gt; todo.id === idTodo ? {...todo, title: newTitle} : todo)
+            return state.map(todo =&gt; todo.id === action.payload.idTodo ? {...todo, title: action.payload.newTitle} : todo)
         }
-&nbsp;
-&nbsp;
 <span class="branch-3 cbranch-no" title="branch not covered" >        default:</span>
 <span class="cstat-no" title="statement not covered" >            return state</span>
     }
@@ -231,15 +214,14 @@ export const todolistReducer = (state: TodolistType[], action: ActionType): Todo
 &nbsp;
 }
 &nbsp;
-&nbsp;
 export type DeleteTodolistCAType = ReturnType&lt;typeof deleteTodolistCA&gt;
 export const deleteTodolistCA = <span class="fstat-no" title="function not covered" >(i</span>dTodo: string) =&gt; {
 <span class="cstat-no" title="statement not covered" >    return {</span>
         type: "DELETE TODO",
         payload: {
             idTodo
-        } as const
-    }
+        }
+    } as const
 }
 &nbsp;
 type AddTodolistCAType = ReturnType&lt;typeof addTodolistCA&gt;
@@ -249,8 +231,8 @@ export const addTodolistCA = <span class="fstat-no" title="function not covered"
         payload: {
             newTitle,
             callback,
-        } as const
-    }
+        }
+    }as const
 }
 &nbsp;
 type EditTodolistCAType = ReturnType&lt;typeof editTodolistCA&gt;
@@ -260,8 +242,8 @@ export const editTodolistCA = <span class="fstat-no" title="function not covered
         payload: {
             idTodo,
             newTitle
-        } as const
-    }
+        }
+    } as const
 }
 &nbsp;
 &nbsp;</pre></td></tr></table></pre>
@@ -271,7 +253,7 @@ export const editTodolistCA = <span class="fstat-no" title="function not covered
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-21T23:13:12.007Z
+                at 2023-11-26T15:52:52.173Z
             </div>
         <script src="prettify.js"></script>
         <script>

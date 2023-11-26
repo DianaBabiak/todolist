@@ -1,28 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1700608392017" clover="3.2.0">
-  <project timestamp="1700608392017" name="All files">
-    <metrics statements="19" coveredstatements="8" conditionals="6" coveredconditionals="3" methods="6" coveredmethods="2" elements="31" coveredelements="13" complexity="0" loc="19" ncloc="19" packages="1" files="1" classes="1"/>
-    <file name="todolistReducer.ts" path="/Users/kiryl/Documents/my_projects/diana/todolist/src/state/todolistReducer.ts">
-      <metrics statements="19" coveredstatements="8" conditionals="6" coveredconditionals="3" methods="6" coveredmethods="2"/>
+<coverage generated="1701014066226" clover="3.2.0">
+  <project timestamp="1701014066226" name="All files">
+    <metrics statements="31" coveredstatements="11" conditionals="11" coveredconditionals="1" methods="10" coveredmethods="2" elements="52" coveredelements="14" complexity="0" loc="31" ncloc="31" packages="1" files="1" classes="1"/>
+    <file name="tasksReduser.ts" path="/Users/kiryl/Documents/my_projects/diana/todolist/src/state/tasksReduser.ts">
+      <metrics statements="31" coveredstatements="11" conditionals="11" coveredconditionals="1" methods="10" coveredmethods="2"/>
       <line num="2" count="1" type="stmt"/>
-      <line num="6" count="1" type="stmt"/>
-      <line num="7" count="1" type="cond" truecount="1" falsecount="3"/>
-      <line num="9" count="0" type="stmt"/>
-      <line num="10" count="0" type="stmt"/>
-      <line num="11" count="0" type="stmt"/>
-      <line num="15" count="0" type="stmt"/>
+      <line num="13" count="1" type="stmt"/>
+      <line num="14" count="1" type="cond" truecount="1" falsecount="6"/>
       <line num="16" count="0" type="stmt"/>
-      <line num="19" count="0" type="stmt"/>
-      <line num="20" count="0" type="stmt"/>
-      <line num="23" count="1" type="stmt"/>
-      <line num="24" count="2" type="cond" truecount="2" falsecount="0"/>
+      <line num="17" count="0" type="stmt"/>
+      <line num="18" count="0" type="stmt"/>
+      <line num="21" count="0" type="stmt"/>
+      <line num="22" count="0" type="stmt"/>
+      <line num="25" count="1" type="stmt"/>
+      <line num="28" count="0" type="stmt"/>
       <line num="29" count="0" type="stmt"/>
-      <line num="37" count="1" type="stmt"/>
+      <line num="34" count="0" type="stmt"/>
+      <line num="37" count="0" type="stmt"/>
       <line num="38" count="0" type="stmt"/>
-      <line num="47" count="1" type="stmt"/>
-      <line num="48" count="0" type="stmt"/>
-      <line num="58" count="1" type="stmt"/>
-      <line num="59" count="0" type="stmt"/>
+      <line num="39" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="45" count="0" type="stmt"/>
+      <line num="46" count="0" type="stmt"/>
+      <line num="48" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="54" count="0" type="stmt"/>
+      <line num="61" count="1" type="stmt"/>
+      <line num="62" count="0" type="stmt"/>
+      <line num="71" count="1" type="stmt"/>
+      <line num="72" count="0" type="stmt"/>
+      <line num="82" count="1" type="stmt"/>
+      <line num="83" count="1" type="stmt"/>
+      <line num="92" count="1" type="stmt"/>
+      <line num="93" count="0" type="stmt"/>
+      <line num="103" count="1" type="stmt"/>
+      <line num="104" count="0" type="stmt"/>
+      <line num="114" count="1" type="stmt"/>
+      <line num="115" count="0" type="stmt"/>
     </file>
   </project>
 </coverage>

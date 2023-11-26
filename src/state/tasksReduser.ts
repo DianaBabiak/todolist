@@ -13,9 +13,8 @@ export type ActionTasksType =
 export const tasksReducer = (state: TodoTasksType, action: ActionTasksType): TodoTasksType => {
     switch (action.type) {
         case "DELETE TODO": {
-            const {idTodo} = action.payload as DeleteTodolistCAType['payload']
             const updatedTasks = {...state};
-            delete updatedTasks[idTodo];
+            delete updatedTasks[action.payload.idTodo];
             return updatedTasks
         }
         case "DELETE TASK": {
@@ -23,8 +22,7 @@ export const tasksReducer = (state: TodoTasksType, action: ActionTasksType): Tod
             return {...state, [idTodo]: state[idTodo].filter(item => item.id !== idTask)}
         }
         case "ADD TODO": {
-            const {idTodo} = action.payload as AddTodoCAType['payload']
-            return {...state, [idTodo]: []}
+            return {...state, [action.payload.idTodo]: []}
         }
         case "ADD TASK": {
             const {idTodo, newTitle} = action.payload as AddTaskCAType['payload']
@@ -76,8 +74,8 @@ export const deleteTaskCA = (idTodo: string, idTask: string) => {
         payload: {
             idTodo,
             idTask
-        } as const
-    }
+        }
+    } as const
 }
 
 type AddTodoCAType = ReturnType<typeof addTodoCA>
@@ -86,8 +84,8 @@ export const addTodoCA = (idTodo: string) => {
         type: "ADD TODO",
         payload: {
             idTodo
-        } as const
-    }
+        }
+    } as const
 }
 
 type AddTaskCAType = ReturnType<typeof addTaskCA>
@@ -97,8 +95,8 @@ export const addTaskCA = (idTodo: string, newTitle: string) => {
         payload: {
             idTodo,
             newTitle
-        } as const
-    }
+        }
+    } as const
 }
 
 type ChangeCheckedTaskCAType = ReturnType<typeof changeCheckedTaskCA>
@@ -108,8 +106,8 @@ export const changeCheckedTaskCA = (idTodo: string, idTask: string) => {
         payload: {
             idTodo,
             idTask
-        } as const
-    }
+        }
+    } as const
 }
 
 type EditTitleTaskCAType = ReturnType<typeof editTitleTask>
@@ -120,7 +118,7 @@ export const editTitleTask = (idTodo: string, idTask: string, newTitle: string) 
             idTodo,
             idTask,
             newTitle
-        } as const
-    }
+        }
+    } as const
 }
 

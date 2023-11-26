@@ -6,25 +6,20 @@ export type ActionType = AddTodolistCAType | DeleteTodolistCAType | EditTodolist
 export const todolistReducer = (state: TodolistType[], action: ActionType): TodolistType[] => {
     switch (action.type) {
         case "ADD TODO": {
-            const {newTitle, callback} = action.payload as AddTodolistCAType["payload"]
             const newIdTodo = v1()
             const newTodo = {
-                title: newTitle,
+                title: action.payload.newTitle,
                 id: newIdTodo
             }
-            callback(newIdTodo)
+            action.payload.callback(newIdTodo)
             return [...state, newTodo]
         }
         case "DELETE TODO": {
-            const {idTodo} = action.payload as DeleteTodolistCAType["payload"]
-            return state.filter(todo => todo.id !== idTodo);
+            return state.filter(todo => todo.id !== action.payload.idTodo);
         }
         case "EDIT TODO TITLE": {
-            const {idTodo, newTitle} = action.payload as EditTodolistCAType["payload"]
-            return state.map(todo => todo.id === idTodo ? {...todo, title: newTitle} : todo)
+            return state.map(todo => todo.id === action.payload.idTodo ? {...todo, title: action.payload.newTitle} : todo)
         }
-
-
         default:
             return state
     }
@@ -32,15 +27,14 @@ export const todolistReducer = (state: TodolistType[], action: ActionType): Todo
 
 }
 
-
 export type DeleteTodolistCAType = ReturnType<typeof deleteTodolistCA>
 export const deleteTodolistCA = (idTodo: string) => {
     return {
         type: "DELETE TODO",
         payload: {
             idTodo
-        } as const
-    }
+        }
+    } as const
 }
 
 type AddTodolistCAType = ReturnType<typeof addTodolistCA>
@@ -50,8 +44,8 @@ export const addTodolistCA = (newTitle: string, callback: (newTodoId: string) =>
         payload: {
             newTitle,
             callback,
-        } as const
-    }
+        }
+    }as const
 }
 
 type EditTodolistCAType = ReturnType<typeof editTodolistCA>
@@ -61,7 +55,7 @@ export const editTodolistCA = (idTodo: string, newTitle: string) => {
         payload: {
             idTodo,
             newTitle
-        } as const
-    }
+        }
+    } as const
 }
 
