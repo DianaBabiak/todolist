@@ -1,12 +1,12 @@
 import {ChangeEvent, KeyboardEvent, useState} from "react";
-import Typography from '@mui/material/Typography';
+import Typography, {TypographyProps} from '@mui/material/Typography';
 
 
 interface EditableSpanProps {
     label: string
     onEditHandler: (newLabel: string) => void
-    variantTypography: any
-        // TypographyProps['variant']
+    variantTypography: TypographyProps['variant']
+
 }
 
 export const EditableSpan = ({label, onEditHandler, variantTypography}: EditableSpanProps) => {

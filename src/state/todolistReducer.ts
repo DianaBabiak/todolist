@@ -1,17 +1,27 @@
 import {TodolistType} from "../propsType.ts";
 import {v1} from "uuid";
 
+
 export type ActionType = AddTodolistCAType | DeleteTodolistCAType | EditTodolistCAType
 
-export const todolistReducer = (state: TodolistType[], action: ActionType): TodolistType[] => {
+export const idTodoOne = v1()
+export const idTodoTwo = v1()
+const initialState= [
+    {
+        title: 'Programming',
+        id: idTodoOne
+    },
+    {
+        title: 'Drinks',
+        id: idTodoTwo
+    }]
+export const todolistReducer = (state: TodolistType[]=initialState, action: ActionType): TodolistType[] => {
     switch (action.type) {
         case "ADD TODO": {
-            const newIdTodo = v1()
             const newTodo = {
-                title: action.payload.newTitle,
-                id: newIdTodo
+                id: action.payload.newTodoId,
+                title: action.payload.newTitle
             }
-            action.payload.callback(newIdTodo)
             return [...state, newTodo]
         }
         case "DELETE TODO": {
@@ -38,14 +48,14 @@ export const deleteTodolistCA = (idTodo: string) => {
 }
 
 type AddTodolistCAType = ReturnType<typeof addTodolistCA>
-export const addTodolistCA = (newTitle: string, callback: (newTodoId: string) => void) => {
+export const addTodolistCA = (newTodoId: string, newTitle: string,) => {
     return {
         type: "ADD TODO",
         payload: {
+            newTodoId,
             newTitle,
-            callback,
         }
-    }as const
+    } as const
 }
 
 type EditTodolistCAType = ReturnType<typeof editTodolistCA>

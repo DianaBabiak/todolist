@@ -40,13 +40,12 @@ test('correct todolist should be added', () => {
             {id: v1(), label: 'Tea', checked: true}
         ]
     }
-    const callBackTodo = (newTodoId: string) => {
-        stateTasks[newTodoId] = []
-    }
+    const newTodoId = v1()
+    stateTasks[newTodoId] = []
 
     const endState = todolistReducer(startState, {
         type: "ADD TODO",
-        payload: {newTitle: newTodolistTitle, callback: callBackTodo}
+        payload: {newTodoId, newTitle: newTodolistTitle}
     })
 
     expect(endState.length).toBe(3)

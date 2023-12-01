@@ -1,5 +1,6 @@
 import {TodoTasksType} from "../propsType.ts";
 import {v1} from "uuid";
+import {idTodoOne, idTodoTwo} from "./todolistReducer.ts";
 
 
 export type ActionTasksType =
@@ -10,7 +11,26 @@ export type ActionTasksType =
     | ChangeCheckedTaskCAType
     | EditTitleTaskCAType
 
-export const tasksReducer = (state: TodoTasksType, action: ActionTasksType): TodoTasksType => {
+const initialState = {
+    [idTodoOne]: [
+        {id: v1(), label: 'JS', checked: true},
+        {id: v1(), label: 'CSS', checked: false},
+        {id: v1(), label: 'React', checked: true}
+    ],
+    [idTodoTwo]: [
+        {id: v1(), label: 'Water', checked: false},
+        {id: v1(), label: 'Coffee', checked: false},
+        {id: v1(), label: 'Tea', checked: true}
+    ]
+
+
+}
+
+
+
+
+
+export const tasksReducer = (state: TodoTasksType=initialState, action: ActionTasksType): TodoTasksType => {
     switch (action.type) {
         case "DELETE TODO": {
             const updatedTasks = {...state};
@@ -21,7 +41,7 @@ export const tasksReducer = (state: TodoTasksType, action: ActionTasksType): Tod
             const {idTodo, idTask} = action.payload as DeleteTaskCAType['payload']
             return {...state, [idTodo]: state[idTodo].filter(item => item.id !== idTask)}
         }
-        case "ADD TODO": {
+        case "ADD EMPTY ARRAY TASK": {
             return {...state, [action.payload.idTodo]: []}
         }
         case "ADD TASK": {
@@ -81,7 +101,7 @@ export const deleteTaskCA = (idTodo: string, idTask: string) => {
 type AddTodoCAType = ReturnType<typeof addTodoCA>
 export const addTodoCA = (idTodo: string) => {
     return {
-        type: "ADD TODO",
+        type: "ADD EMPTY ARRAY TASK",
         payload: {
             idTodo
         }

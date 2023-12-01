@@ -1,4 +1,4 @@
-import {TodoItemStatus, TodolistType, TodoTaskType} from "../../propsType.ts";
+import {TodoItemStatus, TodolistType, TodoTasksType} from "../../propsType.ts";
 import {TodoTask} from "../todoTask/TodoTask.tsx";
 import {useState} from "react";
 import Button from '@mui/material/Button';
@@ -6,19 +6,15 @@ import {AddField} from "../addField/AddField.tsx";
 import {EditableSpan} from "../editableSpan/EditableSpan.tsx";
 import FilterButton from "../filterButton/FilterButton.tsx";
 import DeleteIcon from '@mui/icons-material/Delete';
-
-
 import style from "./Todolist.module.scss"
+import {useDispatch, useSelector} from "react-redux";
+import {addTaskCA, changeCheckedTaskCA, deleteTaskCA, deleteTodoCA, editTitleTask} from "../../state/tasksReduser.ts";
+import {deleteTodolistCA, editTodolistCA} from "../../state/todolistReducer.ts";
+import {RootReducerType} from "../../state/store.ts";
 
 
 interface TodoListProps extends TodolistType {
-    tasks: TodoTaskType[]
-    handlerDeleteTodolist: (idTodo: string) => void
-    handlerDeleteTodoTask: (idTodo: string, idTask: string) => void
-    handlerAddTodoTask: (idTodo: string, newTitle: string) => void
-    onChangeCheckedHandler: (idTodo: string, newTitle: string) => void
-    onEditTodoItem: (idTodo: string, idTask: string, newTitle: string) => void
-    onEditTodo: (idTodo: string, newTitle: string) => void
+
 
 }
 
@@ -26,16 +22,12 @@ interface TodoListProps extends TodolistType {
 export const Todolist = ({
                              title,
                              id,
-                             tasks,
-                             handlerDeleteTodolist,
-                             handlerDeleteTodoTask,
-                             handlerAddTodoTask,
-                             onChangeCheckedHandler,
-                             onEditTodo,
-                             onEditTodoItem
                          }: TodoListProps) => {
     const [status, setStatus] = useState(TodoItemStatus.All)
-    const filterTasks = tasks.filter((item) => {
+    const stateTasks = useSelector<RootReducerType,TodoTasksType>(store =>store.tasks)
+    const dispatch = useDispatch()
+
+    const filterTasks = stateTasks[id].filter((item) => {
         if (status === TodoItemStatus.All) {
             return item
         }
@@ -44,17 +36,22 @@ export const Todolist = ({
             : !item.checked
 
     })
-
+    const handlerDeleteTodolist = () => {
+        dispatch(deleteTodolistCA(id))
+        dispatch(deleteTodoCA(id))
+    }
     const onDeleteTodoTask = (idTask: string) => {
-        handlerDeleteTodoTask(id, idTask)
+        dispatch(deleteTaskCA(id, idTask))
     }
 
-    const onAddTodoItem = (newTitle: string) => {
-        handlerAddTodoTask(id, newTitle)
+
+    const handlerAddTodoTask = (newTitle: string) => {
+        dispatch(addTaskCA(id, newTitle))
+
     }
 
-    const onChangeChecked = (idItem: string) => {
-        onChangeCheckedHandler(id, idItem)
+    const onChangeChecked = (idTask: string) => {
+        dispatch(changeCheckedTaskCA(id, idTask))
     }
 
     const onClickFilterButtonHandler = (activeStatus: TodoItemStatus) => {
@@ -64,20 +61,20 @@ export const Todolist = ({
     }
 
     const onEditTodoHandler = (newTitle: string) => {
-        onEditTodo(id, newTitle)
+        dispatch(editTodolistCA(id, newTitle))
     }
     const onEditTodoItemHandler = (idTask: string, newLabel: string) => {
-        onEditTodoItem(id, idTask, newLabel)
+        dispatch(editTitleTask(id, idTask, newLabel))
     }
     return (
         <div className={style.wrapper}>
             <div className={style.titleWrapper}>
                 <EditableSpan label={title} onEditHandler={onEditTodoHandler} variantTypography={"h4"}/>
-                <Button size='small' onClick={() => handlerDeleteTodolist(id)} variant="outlined" startIcon={<DeleteIcon />}>
+                <Button size='small' onClick={handlerDeleteTodolist} variant="outlined" startIcon={<DeleteIcon/>}>
                     Delete
                 </Button>
             </div>
-            <AddField handlerAdd={onAddTodoItem} />
+            <AddField handlerAdd={handlerAddTodoTask}/>
             <ul>
                 {filterTasks.length ? filterTasks.map((item) => {
                     return (
