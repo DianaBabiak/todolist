@@ -59,11 +59,12 @@ function App() {
 
 
     const handlerAddTodo = (newTitle: string) => {
-        const callback = (newTodoId: string) => {
-            dispatchTasks(addTodoCA(newTodoId))
-        }
+        const newIdTodo = v1()
 
-        dispatchTodo(addTodolistCA(newTitle, callback))
+            dispatchTasks(addTodoCA(newIdTodo))
+
+
+        dispatchTodo(addTodolistCA(newIdTodo, newTitle))
     }
 
     const handlerAddTodoTask = (idTodo: string, newTitle: string) => {

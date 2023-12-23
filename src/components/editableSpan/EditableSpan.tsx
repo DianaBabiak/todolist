@@ -1,5 +1,6 @@
-import {ChangeEvent, KeyboardEvent, useState} from "react";
+import {ChangeEvent, KeyboardEvent, memo, useCallback, useState} from "react";
 import Typography, {TypographyProps} from '@mui/material/Typography';
+
 
 
 interface EditableSpanProps {
@@ -9,20 +10,20 @@ interface EditableSpanProps {
 
 }
 
-export const EditableSpan = ({label, onEditHandler, variantTypography}: EditableSpanProps) => {
+export const EditableSpan = memo(({label, onEditHandler, variantTypography}: EditableSpanProps) => {
     const [editMode, setEditMode] = useState(false)
     const [editLabel, setEditLabel] = useState('')
     const [error, setError] = useState<null | string>(null)
 
-    const onDoubleClickHandler = () => {
+    const onDoubleClickHandler = useCallback(() => {
         setEditMode(true)
         setEditLabel(label)
 
-    }
-    const onChangeLabelHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    }, [label])
+    const onChangeLabelHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setEditLabel(e.currentTarget.value)
-    }
-    const onBlurHandler = () => {
+    }, [])
+    const onBlurHandler = useCallback(() => {
         if (editLabel.trim() === '') {
             setError('Title is required')
             return
@@ -30,8 +31,8 @@ export const EditableSpan = ({label, onEditHandler, variantTypography}: Editable
             setEditMode(false)
             onEditHandler(editLabel)
         }
-    }
-    const onKeyDownEdit = (e: KeyboardEvent<HTMLInputElement>) => {
+    }, [onEditHandler, editLabel])
+    const onKeyDownEdit = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
         setError('')
         if (e.key === 'Enter') {
             if (editLabel.trim() === '') {
@@ -42,32 +43,38 @@ export const EditableSpan = ({label, onEditHandler, variantTypography}: Editable
                 onEditHandler(editLabel)
             }
         }
-    }
+    }, [onEditHandler, editLabel])
 
 
     return (
 
-            <>
-                {editMode ? (
-                    <input
-                        value={editLabel}
-                        autoFocus
-                        onBlur={onBlurHandler}
-                        onChange={onChangeLabelHandler}
-                        onKeyDown={onKeyDownEdit}
-                        className={error ? 'error' : ''}
-                    />
-                ) : (
-                    <>
-                        <Typography onDoubleClick={onDoubleClickHandler} variant={variantTypography} gutterBottom>
-                            {label}
-                        </Typography>
-                        {error && <div className='errorMessage'>{error}</div>}
-                    </>
-                )}
-            </>
-        );
+        <>
+            {editMode ? (
+                <input
+                    value={editLabel}
+                    autoFocus
+                    onBlur={onBlurHandler}
+                    onChange={onChangeLabelHandler}
+                    onKeyDown={onKeyDownEdit}
+                    className={error ? 'error' : ''}
+                />
+            ) : (
+                <>
+                    <Typography style={{
+                        margin: '0',
+                        display: 'flex',
+                        alignItems: 'end',
+                        paddingBottom: '5px'
+                    }} onDoubleClick={onDoubleClickHandler} variant={variantTypography} gutterBottom>
 
 
+                        {label}
+                    </Typography>
+                    {error && <div className='errorMessage'>{error}</div>}
+                </>
+            )}
+        </>
+    );
 
-}
+
+})

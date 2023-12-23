@@ -1,4 +1,4 @@
-import {ChangeEvent, useState, KeyboardEvent} from "react";
+import {ChangeEvent, useState, KeyboardEvent, memo, useCallback} from "react";
 import '../../App.css'
 import TextField from '@mui/material/TextField';
 import AddBoxIcon from '@mui/icons-material/AddBox';
@@ -12,17 +12,15 @@ interface AddFieldProps {
 }
 
 
-export const AddField = ({handlerAdd}: AddFieldProps) => {
+export const AddField = memo(({handlerAdd}: AddFieldProps) => {
     const [value, setValue] = useState('')
     const [error, setError] = useState<null | string>(null)
-    const onChangeValueInput = (e: ChangeEvent<HTMLInputElement>) => {
+    const onChangeValueInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const addedValue = e.target.value
         setValue(addedValue)
+    }, [])
 
-
-    }
-
-    const onClickAdd = () => {
+    const onClickAdd = useCallback(() => {
         if (value.trim() === '') {
             setError('Title is required')
             return
@@ -30,9 +28,9 @@ export const AddField = ({handlerAdd}: AddFieldProps) => {
             handlerAdd?.(value)
             setValue('')
         }
-    }
+    }, [value, handlerAdd])
 
-    const onKeyDownAdd = (e: KeyboardEvent<HTMLInputElement>) => {
+    const onKeyDownAdd = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
         setError('')
         if (e.key === 'Enter') {
             if (value.trim() === '') {
@@ -43,7 +41,7 @@ export const AddField = ({handlerAdd}: AddFieldProps) => {
                 setValue('')
             }
         }
-    }
+    }, [value, handlerAdd])
 
 
     return (
@@ -57,11 +55,11 @@ export const AddField = ({handlerAdd}: AddFieldProps) => {
                        helperText={error}
             />
 
-            <IconButton  aria-label="add" size="large" onClick={onClickAdd}>
+            <IconButton aria-label="add" size="large" onClick={onClickAdd}>
                 <AddBoxIcon fontSize="large" color="primary"/>
             </IconButton>
         </div>
     )
 
 
-}
+})

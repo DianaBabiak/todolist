@@ -11,19 +11,18 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootReducerType} from "./state/store.ts";
 import {v1} from "uuid";
 import {TodolistType} from "./propsType.ts";
-
+import {useCallback} from "react";
 
 function App() {
 
     const stateTodolists = useSelector<RootReducerType,TodolistType[] >(store => store.todolist)
     const dispatch = useDispatch()
 
-    const handlerAddTodo = (newTitle: string) => {
+    const handlerAddTodo = useCallback((newTitle: string) => {
         const newTodoId = v1()
         dispatch(addTodolistCA(newTodoId, newTitle))
         dispatch(addTodoCA(newTodoId))
-    }
-
+    },[dispatch])
 
     return (
         <div className="App">

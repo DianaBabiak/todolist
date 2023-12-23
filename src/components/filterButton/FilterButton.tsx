@@ -1,6 +1,6 @@
-import React from 'react';
 import {TodoItemStatus} from "../../propsType.ts";
 import Button from '@mui/material/Button';
+import {memo} from "react";
 
 
 interface FilterButtonProps {
@@ -9,11 +9,11 @@ interface FilterButtonProps {
     isSelected: boolean;
 }
 
-const FilterButton: React.FC<FilterButtonProps> = ({status, onClickHandler, isSelected}) => {
+export const FilterButton = memo(({status, onClickHandler, isSelected}:FilterButtonProps) => {
     return (
         <Button color='secondary' onClick={() => onClickHandler(status)} variant={isSelected ? "contained" : "outlined"}>{status}</Button>
 
     );
-};
+})
 
-export default FilterButton;
+

@@ -201,6 +201,8 @@ const config: Config = {
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'node'],
   transformIgnorePatterns: ['/node_modules/'],
+  setupFilesAfterEnv: ['<rootDir>/.storybook/setupTests.js'],
+
 };
 
 export default config;
