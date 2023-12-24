@@ -101,9 +101,6 @@ const config: Config = {
   // An enum that specifies notification mode. Requires { notify: true }
   // notifyMode: "failure-change",
 
-  // A preset that is used as a base for Jest's configuration
-  // preset: undefined,
-
   // Run tests from one or more projects
   // projects: undefined,
 
@@ -136,9 +133,6 @@ const config: Config = {
   // The paths to modules that run some code to configure or set up the testing environment before each test
   // setupFiles: [],
 
-  // A list of paths to modules that run some code to configure or set up the testing framework before each test
-  // setupFilesAfterEnv: [],
-
   // The number of seconds after which a test is considered as slow and reported as such in the results.
   // slowTestThreshold: 5,
 
@@ -146,7 +140,7 @@ const config: Config = {
   // snapshotSerializers: [],
 
   // The test environment that will be used for testing
-  testEnvironment: "jsdom",
+  // testEnvironment: "jsdom",
 
   // Options that will be passed to the testEnvironment
   // testEnvironmentOptions: {},
@@ -164,9 +158,6 @@ const config: Config = {
   // testPathIgnorePatterns: [
   //   "/node_modules/"
   // ],
-
-  // The regexp pattern or array of patterns that Jest uses to detect test files
-  // testRegex: [],
 
   // This option allows the use of a custom results processor
   // testResultsProcessor: undefined,
@@ -194,13 +185,16 @@ const config: Config = {
 
   // Whether to use watchman for file crawling
   // watchman: true,
-  preset: 'ts-jest',
-  transform: {
-    '^.+\\.ts$': 'ts-jest',
-    '^.+\\.tsx$': 'ts-jest',
-  },
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'node'],
-  transformIgnorePatterns: ['/node_modules/']
+  preset: 'jest-puppeteer',
+  // transform: {
+  //   '^.+\\.ts$': 'ts-jest',
+  //   '^.+\\.tsx$': 'ts-jest',
+  // },
+  // moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'node'],
+  // transformIgnorePatterns: ['/node_modules/'],
+  testRegex: './*\\.snapshot\\.js$',
+  setupFilesAfterEnv: ['./setupTests.js'],
+  testTimeout: 50000,
 };
 
 export default config;
