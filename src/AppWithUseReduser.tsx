@@ -1,5 +1,5 @@
-import {v1} from "uuid";
 import './App.css';
+import {v1} from "uuid";
 import {Todolist} from "./components/todolist/Todolist.tsx";
 import {useReducer} from "react";
 import {AddField} from "./components/addField/AddField.tsx";
