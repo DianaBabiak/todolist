@@ -18,6 +18,7 @@ type Story = StoryObj<typeof Todolist>;
 
 export const TodolistBasicExample:Story = {
     args:{
-        ...initialGlobalState.todolist[0]
+        todo: { ...initialGlobalState.todolist[0]}
+
     }
 }

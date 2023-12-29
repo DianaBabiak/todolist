@@ -1,43 +1,88 @@
 import {v1} from 'uuid'
-import {TodolistType} from "../propsType.ts";
+import {TodolistType} from "../api/commonAPI.ts";
+import {TaskPriorities, TaskStatuses} from "../type.ts";
 import {todolistReducer} from "./todolistReducer.ts";
 
+const todolistId1 = v1()
+const todolistId2 = v1()
+let startState:TodolistType[]
+ beforeEach(()=>{
 
+     startState = [
+         {
+             title: 'Programming',
+             id: todolistId1,
+             addedDate: '',
+             order: 0
+         },
+         {
+             title: 'Drinks',
+             id: todolistId2,
+             addedDate: '',
+             order: 0
+         }]
+ })
 test('correct todolist should be removed', () => {
-    const todolistId1 = v1()
-    const todolistId2 = v1()
-
-    const startState: TodolistType[] = [
-        {id: todolistId1, title: 'What to learn'},
-        {id: todolistId2, title: 'What to buy'}
-    ]
-
     const endState = todolistReducer(startState, {type: "DELETE TODO", payload: {idTodo: todolistId1}})
 
     expect(endState.length).toBe(1)
     expect(endState[0].id).toBe(todolistId2)
 })
 test('correct todolist should be added', () => {
-    const todolistId1 = v1()
-    const todolistId2 = v1()
-
     const newTodolistTitle = 'New Todolist'
-
-    const startState: TodolistType[] = [
-        {id: todolistId1, title: 'What to learn'},
-        {id: todolistId2, title: 'What to buy'}
-    ]
 
     const stateTasks = {
         [todolistId1]: [
-            {id: v1(), label: 'JS', checked: true},
-            {id: v1(), label: 'CSS', checked: false},
-            {id: v1(), label: 'React', checked: true}
+            {
+                addedDate: '',
+                deadline: '',
+                description: '',
+                id: v1(),
+                order: 0,
+                priority: TaskPriorities.Low,
+                startDate: '',
+                status: TaskStatuses.Completed,
+                title: 'JS',
+                todoListId: todolistId1
+            },
+            {
+                addedDate: '',
+                deadline: '',
+                description: '',
+                id: v1(),
+                order: 0,
+                priority: TaskPriorities.Low,
+                startDate: '',
+                status: TaskStatuses.New,
+                title: 'HTML',
+                todoListId: todolistId1
+            }
         ],
         [todolistId2]: [
-            {id: v1(), label: 'Water', checked: false},
-            {id: v1(), label: 'Coffee', checked: false},
-            {id: v1(), label: 'Tea', checked: true}
+            {
+                addedDate: '',
+                deadline: '',
+                description: '',
+                id: v1(),
+                order: 0,
+                priority: TaskPriorities.Low,
+                startDate: '',
+                status: TaskStatuses.Completed,
+                title: 'Milk',
+                todoListId: todolistId2
+            },
+            {
+                addedDate: '',
+                deadline: '',
+                description: '',
+                id: v1(),
+                order: 0,
+                priority: TaskPriorities.Low,
+                startDate: '',
+                status: TaskStatuses.New,
+                title: 'Water',
+                todoListId: todolistId2
+            }
         ]
     }
     const newTodoId = v1()
@@ -53,16 +98,8 @@ test('correct todolist should be added', () => {
     expect(Object.keys(stateTasks)).toHaveLength(3)
 })
 test('correct todolist should change its name', () => {
-    const todolistId1 = v1()
-    const todolistId2 = v1()
 
     const newTodolistTitle = 'New Todolist'
-
-    const startState: TodolistType[] = [
-        {id: todolistId1, title: 'What to learn'},
-        {id: todolistId2, title: 'What to buy'}
-    ]
-
 
     const endState = todolistReducer(startState, {
         type: "EDIT TODO TITLE",
@@ -72,7 +109,7 @@ test('correct todolist should change its name', () => {
         }
     })
 
-    expect(endState[0].title).toBe('What to learn')
+    expect(endState[0].title).toBe('Programming')
     expect(endState[1].title).toBe(newTodolistTitle)
 })
 

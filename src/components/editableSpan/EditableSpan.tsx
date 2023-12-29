@@ -1,6 +1,6 @@
-import {ChangeEvent, KeyboardEvent, memo, useCallback, useState} from "react";
+import {memo,} from "react";
 import Typography, {TypographyProps} from '@mui/material/Typography';
-
+import {useEditableSpan} from "../../hooks/useEditableSpan.ts";
 
 
 interface EditableSpanProps {
@@ -11,40 +11,15 @@ interface EditableSpanProps {
 }
 
 export const EditableSpan = memo(({label, onEditHandler, variantTypography}: EditableSpanProps) => {
-    const [editMode, setEditMode] = useState(false)
-    const [editLabel, setEditLabel] = useState('')
-    const [error, setError] = useState<null | string>(null)
-
-    const onDoubleClickHandler = useCallback(() => {
-        setEditMode(true)
-        setEditLabel(label)
-
-    }, [label])
-    const onChangeLabelHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        setEditLabel(e.currentTarget.value)
-    }, [])
-    const onBlurHandler = useCallback(() => {
-        if (editLabel.trim() === '') {
-            setError('Title is required')
-            return
-        } else {
-            setEditMode(false)
-            onEditHandler(editLabel)
-        }
-    }, [onEditHandler, editLabel])
-    const onKeyDownEdit = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
-        setError('')
-        if (e.key === 'Enter') {
-            if (editLabel.trim() === '') {
-                setError('Title is required')
-                return
-            } else {
-                setEditMode(false)
-                onEditHandler(editLabel)
-            }
-        }
-    }, [onEditHandler, editLabel])
-
+    const {
+        editMode,
+        error,
+        editLabel,
+        onBlurHandler,
+        onChangeLabelHandler,
+        onKeyDownEdit,
+        onDoubleClickHandler
+    } = useEditableSpan(onEditHandler, label)
 
     return (
 

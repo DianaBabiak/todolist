@@ -1,5 +1,5 @@
-import {TodolistType} from "../propsType.ts";
 import {v1} from "uuid";
+import {TodolistType} from "../api/commonAPI.ts";
 
 
 export type ActionType = AddTodolistCAType | DeleteTodolistCAType | EditTodolistCAType
@@ -9,18 +9,24 @@ export const idTodoTwo = v1()
 const initialState= [
     {
         title: 'Programming',
-        id: idTodoOne
+        id: idTodoOne,
+        addedDate: '',
+        order: 0
     },
     {
         title: 'Drinks',
-        id: idTodoTwo
+        id: idTodoTwo,
+        addedDate: '',
+        order: 0
     }]
 export const todolistReducer = (state: TodolistType[]=initialState, action: ActionType): TodolistType[] => {
     switch (action.type) {
         case "ADD TODO": {
             const newTodo = {
                 id: action.payload.newTodoId,
-                title: action.payload.newTitle
+                title: action.payload.newTitle,
+                addedDate: '',
+                order: 0
             }
             return [...state, newTodo]
         }

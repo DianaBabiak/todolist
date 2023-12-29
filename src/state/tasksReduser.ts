@@ -1,4 +1,4 @@
-import {TodoTasksType} from "../propsType.ts";
+import {TaskPriorities, TaskStatuses, TodoTasksType} from "../type.ts";
 import {v1} from "uuid";
 import {idTodoOne, idTodoTwo} from "./todolistReducer.ts";
 
@@ -13,24 +13,88 @@ export type ActionTasksType =
 
 const initialState = {
     [idTodoOne]: [
-        {id: v1(), label: 'JS', checked: true},
-        {id: v1(), label: 'CSS', checked: false},
-        {id: v1(), label: 'React', checked: true}
+        {
+            addedDate: '',
+            deadline: '',
+            description: '',
+            id: v1(),
+            order: 0,
+            priority: TaskPriorities.Low,
+            startDate: '',
+            status: TaskStatuses.Completed,
+            title: 'JS',
+            todoListId: idTodoOne
+        },
+        {
+            addedDate: '',
+            deadline: '',
+            description: '',
+            id: v1(),
+            order: 0,
+            priority: TaskPriorities.Low,
+            startDate: '',
+            status: TaskStatuses.New,
+            title: 'HTML',
+            todoListId: idTodoOne
+        },
+        {
+            addedDate: '',
+            deadline: '',
+            description: '',
+            id: v1(),
+            order: 0,
+            priority: TaskPriorities.Low,
+            startDate: '',
+            status: TaskStatuses.Completed,
+            title: 'React',
+            todoListId: idTodoOne
+        },
     ],
     [idTodoTwo]: [
-        {id: v1(), label: 'Water', checked: false},
-        {id: v1(), label: 'Coffee', checked: false},
-        {id: v1(), label: 'Tea', checked: true}
+        {
+            addedDate: '',
+            deadline: '',
+            description: '',
+            id: v1(),
+            order: 0,
+            priority: TaskPriorities.Low,
+            startDate: '',
+            status: TaskStatuses.Completed,
+            title: 'Milk',
+            todoListId: idTodoTwo
+        },
+        {
+            addedDate: '',
+            deadline: '',
+            description: '',
+            id: v1(),
+            order: 0,
+            priority: TaskPriorities.Low,
+            startDate: '',
+            status: TaskStatuses.New,
+            title: 'Water',
+            todoListId: idTodoTwo
+        },
+        {
+            addedDate: '',
+            deadline: '',
+            description: '',
+            id: v1(),
+            order: 0,
+            priority: TaskPriorities.Low,
+            startDate: '',
+            status: TaskStatuses.Completed,
+            title: 'Tea',
+            todoListId: idTodoTwo
+        },
+
     ]
 
 
 }
 
 
-
-
-
-export const tasksReducer = (state: TodoTasksType=initialState, action: ActionTasksType): TodoTasksType => {
+export const tasksReducer = (state: TodoTasksType = initialState, action: ActionTasksType): TodoTasksType => {
     switch (action.type) {
         case "DELETE TODO": {
             const updatedTasks = {...state};
@@ -47,17 +111,24 @@ export const tasksReducer = (state: TodoTasksType=initialState, action: ActionTa
         case "ADD TASK": {
             const {idTodo, newTitle} = action.payload as AddTaskCAType['payload']
             const newTask = {
+                addedDate: '',
+                deadline: '',
+                description: '',
                 id: v1(),
-                label: newTitle,
-                checked: false
+                order: 0,
+                priority: TaskPriorities.Later,
+                startDate: '',
+                status: TaskStatuses.New,
+                title: newTitle,
+                todoListId: idTodo
             };
             return {...state, [idTodo]: [...state[idTodo], newTask]}
         }
-        case "CHANGE CHECKED": {
-            const {idTodo, idTask} = action.payload as ChangeCheckedTaskCAType['payload']
+        case "CHANGE STATUS": {
+            const {idTodo, idTask,status} = action.payload as ChangeCheckedTaskCAType['payload']
             return {
                 ...state, [idTodo]: state[idTodo].map(task => idTask === task.id
-                    ? {...task, checked: !task.checked}
+                    ? {...task, status}
                     : task)
             }
         }
@@ -120,12 +191,13 @@ export const addTaskCA = (idTodo: string, newTitle: string) => {
 }
 
 type ChangeCheckedTaskCAType = ReturnType<typeof changeCheckedTaskCA>
-export const changeCheckedTaskCA = (idTodo: string, idTask: string) => {
+export const changeCheckedTaskCA = (idTodo: string, idTask: string, status: TaskStatuses) => {
     return {
-        type: "CHANGE CHECKED",
+        type: "CHANGE STATUS",
         payload: {
             idTodo,
-            idTask
+            idTask,
+            status
         }
     } as const
 }

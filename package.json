@@ -9,10 +9,10 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "jest",
-    "storybook": "storybook dev -p 6006",
+    "storybook": "storybook dev -p 9009",
     "build-storybook": "storybook build",
     "jest:integration": "jest -c integration/jest.config.ts",
-    "test:integration": "start-server-and-test storybook http-get://localhost:6006 jest:integration"
+    "test:integration": "start-server-and-test storybook http-get://localhost:9009 jest:integration"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -28,6 +28,7 @@
     "@storybook/react-vite": "^7.6.6",
     "@storybook/test": "^7.6.6",
     "@types/uuid": "^9.0.5",
+    "axios": "^1.6.3",
     "clsx": "^2.0.0",
     "init": "^0.1.2",
     "node-sass": "^9.0.0",

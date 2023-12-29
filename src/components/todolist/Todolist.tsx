@@ -1,74 +1,37 @@
-import {TodoItemStatus, TodolistType, TodoTasksType} from "../../propsType.ts";
+import {TodoItemFilter} from "../../type.ts";
 import {TodoTask} from "../todoTask/TodoTask.tsx";
-import {memo, useCallback, useState} from "react";
+import {memo} from "react";
 import Button from '@mui/material/Button';
 import {AddField} from "../addField/AddField.tsx";
 import {EditableSpan} from "../editableSpan/EditableSpan.tsx";
 import DeleteIcon from '@mui/icons-material/Delete';
 import style from "./Todolist.module.scss"
-import {useDispatch, useSelector} from "react-redux";
-import {addTaskCA, changeCheckedTaskCA, deleteTaskCA, deleteTodoCA, editTitleTask} from "../../state/tasksReduser.ts";
-import {deleteTodolistCA, editTodolistCA} from "../../state/todolistReducer.ts";
-import {RootReducerType} from "../../state/store.ts";
 import {FilterButton} from "../filterButton/FilterButton.tsx";
+import {useTodolist} from "../../hooks/useTodolist.ts";
+import {TodolistType} from "../../api/commonAPI.ts";
 
-
-interface TodoListProps extends TodolistType {
-
+interface TodoListProps {
+    todo: TodolistType
 
 }
 
+export const Todolist = memo(({todo}: TodoListProps) => {
+    const {
+        status,
+        filterTasks,
+        onEditTodoHandler,
+        handlerDeleteTodolist,
+        handlerAddTodoTask,
+        onDeleteTodoTask,
+        onChangeChecked,
+        onEditTodoItemHandler,
+        onClickFilterButtonHandler
+    } = useTodolist(todo.id)
 
-export const Todolist = memo(({title, id}: TodoListProps) => {
-    const [status, setStatus] = useState(TodoItemStatus.All)
-    const stateTasks = useSelector<RootReducerType, TodoTasksType>(store => store.tasks)
-    const dispatch = useDispatch()
-
-    const filterTasks = stateTasks[id].filter((item) => {
-        if (status === TodoItemStatus.All) {
-            return item
-        }
-        return status === TodoItemStatus.Completed
-            ? item.checked
-            : !item.checked
-
-    })
-
-    const handlerDeleteTodolist = useCallback(() => {
-        dispatch(deleteTodolistCA(id))
-        dispatch(deleteTodoCA(id))
-    }, [dispatch, id])
-
-    const onDeleteTodoTask = useCallback((idTask: string) => {
-        dispatch(deleteTaskCA(id, idTask))
-    }, [dispatch, id])
-
-    const handlerAddTodoTask = useCallback((newTitle: string) => {
-        dispatch(addTaskCA(id, newTitle))
-
-    }, [dispatch, id])
-
-    const onChangeChecked = useCallback((idTask: string) => {
-        dispatch(changeCheckedTaskCA(id, idTask))
-    }, [dispatch, id])
-
-    const onClickFilterButtonHandler = useCallback((activeStatus: TodoItemStatus) => {
-        setStatus(activeStatus)
-
-
-    }, [])
-
-    const onEditTodoHandler = useCallback((newTitle: string) => {
-        dispatch(editTodolistCA(id, newTitle))
-    }, [dispatch, id])
-
-    const onEditTodoItemHandler = useCallback((idTask: string, newLabel: string) => {
-        dispatch(editTitleTask(id, idTask, newLabel))
-    }, [dispatch, id])
     return (
         <div className={style.wrapper}>
             <div className={style.titleWrapper}>
-                <EditableSpan label={title} onEditHandler={onEditTodoHandler} variantTypography={"h4"}/>
+                <EditableSpan label={todo.title} onEditHandler={onEditTodoHandler} variantTypography={"h4"}/>
                 <Button size='small' onClick={handlerDeleteTodolist} variant="outlined" startIcon={<DeleteIcon/>}>
                     Delete
                 </Button>
@@ -78,9 +41,7 @@ export const Todolist = memo(({title, id}: TodoListProps) => {
                 {filterTasks.length ? filterTasks.map((item) => {
                     return (
                         <TodoTask key={item.id}
-                                  label={item.label}
-                                  checked={item.checked}
-                                  id={item.id}
+                                  task={item}
                                   handlerDeleteTodoTask={onDeleteTodoTask}
                                   onChangeCheckedHandler={onChangeChecked}
                                   onEditTodoItem={onEditTodoItemHandler}
@@ -91,19 +52,19 @@ export const Todolist = memo(({title, id}: TodoListProps) => {
             </ul>
             <div className={style.wrapperButtons}>
                 <FilterButton
-                    status={TodoItemStatus.All}
+                    status={TodoItemFilter.All}
                     onClickHandler={onClickFilterButtonHandler}
-                    isSelected={status === TodoItemStatus.All}
+                    isSelected={status === TodoItemFilter.All}
                 />
                 <FilterButton
-                    status={TodoItemStatus.Active}
+                    status={TodoItemFilter.Active}
                     onClickHandler={onClickFilterButtonHandler}
-                    isSelected={status === TodoItemStatus.Active}
+                    isSelected={status === TodoItemFilter.Active}
                 />
                 <FilterButton
-                    status={TodoItemStatus.Completed}
+                    status={TodoItemFilter.Completed}
                     onClickHandler={onClickFilterButtonHandler}
-                    isSelected={status === TodoItemStatus.Completed}
+                    isSelected={status === TodoItemFilter.Completed}
                 />
             </div>
         </div>

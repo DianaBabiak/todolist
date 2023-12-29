@@ -10,8 +10,8 @@ import {addTodoCA,} from "./state/tasksReduser.ts";
 import {useDispatch, useSelector} from "react-redux";
 import {RootReducerType} from "./state/store.ts";
 import {v1} from "uuid";
-import {TodolistType} from "./propsType.ts";
 import {useCallback} from "react";
+import {TodolistType} from "./api/commonAPI.ts";
 
 function App() {
 
@@ -35,8 +35,7 @@ function App() {
                             <Grid item style={{margin: '40px 0 0'}} xs={4}>
                                 <Paper elevation={3}>
                                     <Todolist key={todo.id}
-                                              title={todo.title}
-                                              id={todo.id}/>
+                                              todo={todo}/>
                                 </Paper>
                             </Grid>
                         )

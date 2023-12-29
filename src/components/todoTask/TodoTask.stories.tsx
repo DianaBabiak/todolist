@@ -17,8 +17,7 @@ type Story = StoryObj<typeof TodoTask>;
 export const TodoTaskBasicExample: Story = {
 
     args: {
-        ...initialGlobalState.todolist[0],
-        ...initialGlobalState.tasks[idTodoOne][0],
+        task: {...initialGlobalState.tasks[idTodoOne][0]},
         handlerDeleteTodoTask: action('Delete todoTask'),
         onChangeCheckedHandler: action('change checked task'),
         onEditTodoItem: action('edite title')

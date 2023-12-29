@@ -1,11 +1,11 @@
-import {TodoItemStatus} from "../../propsType.ts";
+import {TodoItemFilter} from "../../type.ts";
 import Button from '@mui/material/Button';
 import {memo} from "react";
 
 
 interface FilterButtonProps {
-    status: TodoItemStatus;
-    onClickHandler: (status: TodoItemStatus) => void;
+    status: TodoItemFilter;
+    onClickHandler: (status: TodoItemFilter) => void;
     isSelected: boolean;
 }
 

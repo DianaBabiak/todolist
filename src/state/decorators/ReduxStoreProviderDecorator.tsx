@@ -5,6 +5,7 @@ import {v1} from "uuid";
 import {tasksReducer} from "../tasksReduser.ts";
 import {idTodoOne, idTodoTwo, todolistReducer} from "../todolistReducer.ts";
 import {RootReducerType} from "../store.ts";
+import {TaskPriorities, TaskStatuses} from "../../type.ts";
 
 const rootReducer = combineReducers({
     todolist:todolistReducer,
@@ -15,23 +16,93 @@ export const initialGlobalState:RootReducerType = {
     todolist: [
         {
             title: 'Programming',
-            id: idTodoOne
+            id: idTodoOne,
+            addedDate: '',
+            order: 0
         },
         {
             title: 'Drinks',
-            id: idTodoTwo
+            id: idTodoTwo,
+            addedDate: '',
+            order: 0
         }],
     tasks: {
-
         [idTodoOne]: [
-            {id: v1(), label: 'JS', checked: true},
-            {id: v1(), label: 'CSS', checked: false},
-            {id: v1(), label: 'React', checked: true}
+            {
+                addedDate: '',
+                deadline: '',
+                description: '',
+                id: v1(),
+                order: 0,
+                priority: TaskPriorities.Low,
+                startDate: '',
+                status: TaskStatuses.Completed,
+                title: 'JS',
+                todoListId: idTodoOne
+            },
+            {
+                addedDate: '',
+                deadline: '',
+                description: '',
+                id: v1(),
+                order: 0,
+                priority: TaskPriorities.Low,
+                startDate: '',
+                status: TaskStatuses.New,
+                title: 'HTML',
+                todoListId: idTodoOne
+            },
+            {
+                addedDate: '',
+                deadline: '',
+                description: '',
+                id: v1(),
+                order: 0,
+                priority: TaskPriorities.Low,
+                startDate: '',
+                status: TaskStatuses.Completed,
+                title: 'React',
+                todoListId: idTodoOne
+            },
         ],
         [idTodoTwo]: [
-            {id: v1(), label: 'Water', checked: false},
-            {id: v1(), label: 'Coffee', checked: false},
-            {id: v1(), label: 'Tea', checked: true}
+            {
+                addedDate: '',
+                deadline: '',
+                description: '',
+                id: v1(),
+                order: 0,
+                priority: TaskPriorities.Low,
+                startDate: '',
+                status: TaskStatuses.Completed,
+                title: 'Milk',
+                todoListId: idTodoTwo
+            },
+            {
+                addedDate: '',
+                deadline: '',
+                description: '',
+                id: v1(),
+                order: 0,
+                priority: TaskPriorities.Low,
+                startDate: '',
+                status: TaskStatuses.New,
+                title: 'Water',
+                todoListId: idTodoTwo
+            },
+            {
+                addedDate: '',
+                deadline: '',
+                description: '',
+                id: v1(),
+                order: 0,
+                priority: TaskPriorities.Low,
+                startDate: '',
+                status: TaskStatuses.Completed,
+                title: 'Tea',
+                todoListId: idTodoTwo
+            },
+
         ]
 
 
