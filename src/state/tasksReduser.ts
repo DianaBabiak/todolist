@@ -1,97 +1,21 @@
 import {TaskPriorities, TaskStatuses, TodoTasksType} from "../type.ts";
 import {v1} from "uuid";
-import {idTodoOne, idTodoTwo} from "./todolistReducer.ts";
+import {TasksType, UpdatePutTaskType} from "../api/commonAPI.ts";
+import {GetTodolistsCAType} from "./todolistReducer.ts";
+import {AppThunkResult} from "./store.ts";
+import {tasksAPI} from "../api/tasksAPI.ts";
 
 
 export type ActionTasksType =
-    DeleteTodolistCAType
+    | DeleteTodolistCAType
     | DeleteTaskCAType
     | AddTodoCAType
     | AddTaskCAType
     | ChangeCheckedTaskCAType
-    | EditTitleTaskCAType
-
-const initialState = {
-    [idTodoOne]: [
-        {
-            addedDate: '',
-            deadline: '',
-            description: '',
-            id: v1(),
-            order: 0,
-            priority: TaskPriorities.Low,
-            startDate: '',
-            status: TaskStatuses.Completed,
-            title: 'JS',
-            todoListId: idTodoOne
-        },
-        {
-            addedDate: '',
-            deadline: '',
-            description: '',
-            id: v1(),
-            order: 0,
-            priority: TaskPriorities.Low,
-            startDate: '',
-            status: TaskStatuses.New,
-            title: 'HTML',
-            todoListId: idTodoOne
-        },
-        {
-            addedDate: '',
-            deadline: '',
-            description: '',
-            id: v1(),
-            order: 0,
-            priority: TaskPriorities.Low,
-            startDate: '',
-            status: TaskStatuses.Completed,
-            title: 'React',
-            todoListId: idTodoOne
-        },
-    ],
-    [idTodoTwo]: [
-        {
-            addedDate: '',
-            deadline: '',
-            description: '',
-            id: v1(),
-            order: 0,
-            priority: TaskPriorities.Low,
-            startDate: '',
-            status: TaskStatuses.Completed,
-            title: 'Milk',
-            todoListId: idTodoTwo
-        },
-        {
-            addedDate: '',
-            deadline: '',
-            description: '',
-            id: v1(),
-            order: 0,
-            priority: TaskPriorities.Low,
-            startDate: '',
-            status: TaskStatuses.New,
-            title: 'Water',
-            todoListId: idTodoTwo
-        },
-        {
-            addedDate: '',
-            deadline: '',
-            description: '',
-            id: v1(),
-            order: 0,
-            priority: TaskPriorities.Low,
-            startDate: '',
-            status: TaskStatuses.Completed,
-            title: 'Tea',
-            todoListId: idTodoTwo
-        },
-
-    ]
+    | EditTitleTaskCAType | GetTasksCAType | GetTodolistsCAType
 
 
-}
+const initialState: TodoTasksType = {}
 
 
 export const tasksReducer = (state: TodoTasksType = initialState, action: ActionTasksType): TodoTasksType => {
@@ -125,7 +49,7 @@ export const tasksReducer = (state: TodoTasksType = initialState, action: Action
             return {...state, [idTodo]: [...state[idTodo], newTask]}
         }
         case "CHANGE STATUS": {
-            const {idTodo, idTask,status} = action.payload as ChangeCheckedTaskCAType['payload']
+            const {idTodo, idTask, status} = action.payload as ChangeCheckedTaskCAType['payload']
             return {
                 ...state, [idTodo]: state[idTodo].map(task => idTask === task.id
                     ? {...task, status}
@@ -137,10 +61,27 @@ export const tasksReducer = (state: TodoTasksType = initialState, action: Action
             return {
                 ...state,
                 [idTodo]: state[idTodo].map(task => idTask === task.id
-                    ? {...task, label: newTitle}
+                    ? {...task, title: newTitle}
                     : task)
             }
         }
+        case "GET TASKS FROM API": {
+            console.log("GET TASKS FROM API")
+            const {payload} = action as GetTasksCAType
+            return {
+                ...state,
+                [payload.idTodo]: payload.data.items
+            }
+        }
+        case "GET TODOLISTS FROM API": {
+            const {payload} = action as GetTodolistsCAType
+
+            return payload.data.reduce<TodoTasksType>((acc, todo) => {
+                return {...acc, [todo.id]: []}
+            }, state)
+        }
+
+
         default:
             return state
     }
@@ -213,4 +154,90 @@ export const editTitleTask = (idTodo: string, idTask: string, newTitle: string) 
         }
     } as const
 }
+
+type GetTasksCAType = ReturnType<typeof getTasksCA>
+export const getTasksCA = (idTodo: string, data: TasksType) => {
+    return {
+        type: "GET TASKS FROM API",
+        payload: {
+            idTodo,
+            data
+        }
+    } as const
+}
+
+
+export const getTasksTC = (id: string): AppThunkResult => (dispatch) => {
+    tasksAPI.getTasks(id)
+        .then((data) => dispatch(getTasksCA(id, data)))
+        .catch((err) => console.log('err getTask', err))
+}
+
+export const deleteTaskTC = (idTodo: string, idTask: string): AppThunkResult => async (dispatch) => {
+    try {
+        const result = await tasksAPI.deleteTask(idTodo, idTask)
+        if (result.resultCode === 0) {
+            dispatch(deleteTaskCA(idTodo, idTask))
+        }
+    } catch (error) {
+        console.log('delete task', error)
+    }
+}
+
+export const createTaskTC = (idTodo: string, newTitle: string): AppThunkResult => async (dispatch) => {
+    try {
+        const result = await tasksAPI.createTask(idTodo, newTitle)
+        if (result.resultCode === 0) {
+            dispatch(addTaskCA(idTodo, newTitle))
+        }
+    } catch (error) {
+        console.log('add task', error)
+    }
+}
+
+export const editTitleTaskTC = (idTodo: string, idTask: string, newTitle: string): AppThunkResult => async (dispatch, getState) => {
+    try {
+        const state = getState()
+        const tasks = state.tasks[idTodo]
+        const task = tasks.find(t => t.id === idTask)
+        const model:UpdatePutTaskType = {
+            title: newTitle,
+            description: task?.description,
+            status: task?.status,
+            priority: task?.priority,
+            startDate: task?.startDate,
+            deadline: task?.deadline
+        }
+        const result = await tasksAPI.updateTask(idTodo, idTask, model)
+        if (result.resultCode === 0) {
+            dispatch(editTitleTask(idTodo, idTask, newTitle))
+        }
+    } catch (error) {
+        console.log('edit title task', error)
+    }
+}
+
+export const changeCheckedTaskTC = (idTodo: string, idTask: string, status:TaskStatuses ): AppThunkResult => async (dispatch, getState) => {
+    try {
+        const state = getState()
+        const tasks = state.tasks[idTodo]
+        const task = tasks.find(t => t.id === idTask)
+        const model:UpdatePutTaskType = {
+            title: task?.title,
+            description: task?.description,
+            status: status,
+            priority: task?.priority,
+            startDate: task?.startDate,
+            deadline: task?.deadline
+        }
+        const result = await tasksAPI.updateTask(idTodo, idTask, model)
+        if (result.resultCode === 0) {
+            dispatch(changeCheckedTaskCA(idTodo, idTask, status))
+        }
+    } catch (error) {
+        console.log('edit title task', error)
+    }
+}
+
+
 

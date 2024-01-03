@@ -1,6 +1,6 @@
 import {TodoItemFilter} from "../../type.ts";
 import {TodoTask} from "../todoTask/TodoTask.tsx";
-import {memo} from "react";
+import {memo, useEffect} from "react";
 import Button from '@mui/material/Button';
 import {AddField} from "../addField/AddField.tsx";
 import {EditableSpan} from "../editableSpan/EditableSpan.tsx";
@@ -9,6 +9,8 @@ import style from "./Todolist.module.scss"
 import {FilterButton} from "../filterButton/FilterButton.tsx";
 import {useTodolist} from "../../hooks/useTodolist.ts";
 import {TodolistType} from "../../api/commonAPI.ts";
+import { getTasksTC} from "../../state/tasksReduser.ts";
+import {useAppDispatch} from "../../state/store.ts";
 
 interface TodoListProps {
     todo: TodolistType
@@ -16,6 +18,8 @@ interface TodoListProps {
 }
 
 export const Todolist = memo(({todo}: TodoListProps) => {
+    const dispatch = useAppDispatch()
+
     const {
         status,
         filterTasks,
@@ -27,6 +31,10 @@ export const Todolist = memo(({todo}: TodoListProps) => {
         onEditTodoItemHandler,
         onClickFilterButtonHandler
     } = useTodolist(todo.id)
+
+    useEffect(() => {
+       dispatch(getTasksTC(todo.id))
+    }, [dispatch, todo.id])
 
     return (
         <div className={style.wrapper}>

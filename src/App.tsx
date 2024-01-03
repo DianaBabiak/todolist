@@ -5,23 +5,21 @@ import {AppBarComponent} from "./components/appBarComponent/AppBarComponent.tsx"
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import {addTodolistCA} from "./state/todolistReducer.ts";
-import {addTodoCA,} from "./state/tasksReduser.ts";
-import {useDispatch, useSelector} from "react-redux";
-import {RootReducerType} from "./state/store.ts";
-import {v1} from "uuid";
-import {useCallback} from "react";
-import {TodolistType} from "./api/commonAPI.ts";
+import {createTodolistTC, getTodolistsTC} from "./state/todolistReducer.ts";
+import { useAppDispatch, useAppSelector} from "./state/store.ts";
+import {useCallback, useEffect} from "react";
 
 function App() {
 
-    const stateTodolists = useSelector<RootReducerType,TodolistType[] >(store => store.todolist)
-    const dispatch = useDispatch()
+    const stateTodolists = useAppSelector(({todolist}) => todolist)
+    const dispatch = useAppDispatch()
+
+    useEffect(()=>{
+       dispatch(getTodolistsTC())
+    },[dispatch])
 
     const handlerAddTodo = useCallback((newTitle: string) => {
-        const newTodoId = v1()
-        dispatch(addTodolistCA(newTodoId, newTitle))
-        dispatch(addTodoCA(newTodoId))
+        dispatch(createTodolistTC(newTitle))
     },[dispatch])
 
     return (

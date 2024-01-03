@@ -47,10 +47,10 @@ export type CommonAPIType<Data=object> = {
 }
 
 export type UpdatePutTaskType = {
-    title: string
-    description: string
-    status: number
-    priority: number
-    startDate: null | string
-    deadline: null | string
+    title?: string
+    description?: string | null
+    status?: TaskStatuses
+    priority?: TaskPriorities
+    startDate?: null | string
+    deadline?: null | string
 }

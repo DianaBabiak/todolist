@@ -1,11 +1,12 @@
 import React from 'react'
 import {Provider} from "react-redux";
-import {combineReducers, legacy_createStore} from "redux";
+import {applyMiddleware, combineReducers, legacy_createStore} from "redux";
 import {v1} from "uuid";
 import {tasksReducer} from "../tasksReduser.ts";
 import {idTodoOne, idTodoTwo, todolistReducer} from "../todolistReducer.ts";
 import {RootReducerType} from "../store.ts";
 import {TaskPriorities, TaskStatuses} from "../../type.ts";
+import {thunk} from "redux-thunk";
 
 const rootReducer = combineReducers({
     todolist:todolistReducer,
@@ -109,7 +110,7 @@ export const initialGlobalState:RootReducerType = {
     }
 };
 export type RootReducerTypeRoot = ReturnType<typeof rootReducer>
-export const storyBookStore = legacy_createStore(rootReducer, initialGlobalState);
+export const storyBookStore = legacy_createStore(rootReducer, initialGlobalState, applyMiddleware(thunk));
 
 
 export const ReduxStoreProviderDecorator = (storyFn: () => React.ReactNode) => {

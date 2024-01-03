@@ -5,6 +5,7 @@ import {todolistReducer} from "./todolistReducer.ts";
 
 const todolistId1 = v1()
 const todolistId2 = v1()
+
 let startState:TodolistType[]
  beforeEach(()=>{
 
@@ -90,11 +91,16 @@ test('correct todolist should be added', () => {
 
     const endState = todolistReducer(startState, {
         type: "ADD TODO",
-        payload: {newTodoId, newTitle: newTodolistTitle}
+        payload: {data: {
+                title: newTodolistTitle,
+                id: newTodoId,
+                addedDate: '',
+                order: 0
+            }}
     })
 
     expect(endState.length).toBe(3)
-    expect(endState[2].title).toBe(newTodolistTitle)
+    expect(endState[0].title).toBe(newTodolistTitle)
     expect(Object.keys(stateTasks)).toHaveLength(3)
 })
 test('correct todolist should change its name', () => {
