@@ -1,12 +1,12 @@
 import {v1} from 'uuid'
-import {TodolistType} from "../api/commonAPI.ts";
-import {TaskPriorities, TaskStatuses} from "../type.ts";
-import {todolistReducer} from "./todolistReducer.ts";
+import {TodolistType} from "../../api/commonAPI.ts";
+import {StatusLoading, TaskPriorities, TaskStatuses, TodolistStateType} from "../type.ts";
+import {getTodolistsCA, todolistReducer} from "./todolistReducer.ts";
 
 const todolistId1 = v1()
 const todolistId2 = v1()
 
-let startState:TodolistType[]
+let startState:TodolistStateType[]
  beforeEach(()=>{
 
      startState = [
@@ -14,13 +14,15 @@ let startState:TodolistType[]
              title: 'Programming',
              id: todolistId1,
              addedDate: '',
-             order: 0
+             order: 0,
+             entityStatus: StatusLoading.idle
          },
          {
              title: 'Drinks',
              id: todolistId2,
              addedDate: '',
-             order: 0
+             order: 0,
+             entityStatus: StatusLoading.idle
          }]
  })
 test('correct todolist should be removed', () => {
@@ -104,9 +106,7 @@ test('correct todolist should be added', () => {
     expect(Object.keys(stateTasks)).toHaveLength(3)
 })
 test('correct todolist should change its name', () => {
-
     const newTodolistTitle = 'New Todolist'
-
     const endState = todolistReducer(startState, {
         type: "EDIT TODO TITLE",
         payload: {
@@ -114,11 +114,34 @@ test('correct todolist should change its name', () => {
             newTitle: newTodolistTitle
         }
     })
-
     expect(endState[0].title).toBe('Programming')
     expect(endState[1].title).toBe(newTodolistTitle)
 })
+test('correct todolist should change its status', () => {
+    const newStatus = StatusLoading.loading
+    const endState = todolistReducer(startState, {
+        type: "CHANGE STATUS TODOLIST",
+        payload: {
+            idTodo: todolistId2,
+            status: newStatus
+        }
+    })
+    expect(endState[0].entityStatus).toBe(StatusLoading.idle)
+    expect(endState[1].entityStatus).toBe(newStatus)
+})
+test('get todolists from API', () => {
+    const data:TodolistType[] = [...startState,{
+        title: 'Books',
+            id: v1(),
+            addedDate: '',
+            order: 0
+    } ]
+    const endState = todolistReducer(startState, getTodolistsCA(data))
+    expect(endState[2].title).toBe('Books')
+    expect(endState.length).toBe(3)
+    expect(startState.length).toBe(2)
 
+})
 
 
 

@@ -2,15 +2,20 @@ import React from 'react'
 import {Provider} from "react-redux";
 import {applyMiddleware, combineReducers, legacy_createStore} from "redux";
 import {v1} from "uuid";
-import {tasksReducer} from "../tasksReduser.ts";
-import {idTodoOne, idTodoTwo, todolistReducer} from "../todolistReducer.ts";
+import {tasksReducer} from "../tasks/tasksReduser.ts";
 import {RootReducerType} from "../store.ts";
-import {TaskPriorities, TaskStatuses} from "../../type.ts";
+import {StatusLoading, TaskPriorities, TaskStatuses} from "../type.ts";
 import {thunk} from "redux-thunk";
+import {todolistReducer} from "../todolists/todolistReducer.ts";
+import {appReducer} from "../app/appReducer.ts";
+
+export const idTodoTwo=v1()
+export const idTodoOne=v1()
 
 const rootReducer = combineReducers({
     todolist:todolistReducer,
-    tasks:tasksReducer
+    tasks:tasksReducer,
+    app:appReducer
 })
 
 export const initialGlobalState:RootReducerType = {
@@ -19,13 +24,16 @@ export const initialGlobalState:RootReducerType = {
             title: 'Programming',
             id: idTodoOne,
             addedDate: '',
-            order: 0
+            order: 0,
+            entityStatus:StatusLoading.idle
         },
         {
             title: 'Drinks',
             id: idTodoTwo,
             addedDate: '',
-            order: 0
+            order: 0,
+            entityStatus:StatusLoading.loading
+
         }],
     tasks: {
         [idTodoOne]: [
@@ -107,6 +115,10 @@ export const initialGlobalState:RootReducerType = {
         ]
 
 
+    },
+    app:{
+        statusLoading: StatusLoading.idle,
+        errorMessage:null
     }
 };
 export type RootReducerTypeRoot = ReturnType<typeof rootReducer>

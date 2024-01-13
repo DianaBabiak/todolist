@@ -7,10 +7,11 @@ interface EditableSpanProps {
     label: string
     onEditHandler: (newLabel: string) => void
     variantTypography: TypographyProps['variant']
+    disabled?:boolean
 
 }
 
-export const EditableSpan = memo(({label, onEditHandler, variantTypography}: EditableSpanProps) => {
+export const EditableSpan = memo(({label, onEditHandler, variantTypography, disabled}: EditableSpanProps) => {
     const {
         editMode,
         error,
@@ -19,7 +20,7 @@ export const EditableSpan = memo(({label, onEditHandler, variantTypography}: Edi
         onChangeLabelHandler,
         onKeyDownEdit,
         onDoubleClickHandler
-    } = useEditableSpan(onEditHandler, label)
+    } = useEditableSpan(onEditHandler, label, disabled)
 
     return (
 

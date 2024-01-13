@@ -1,7 +1,7 @@
 import {useState} from "react";
 import {tasksAPI} from "../api/tasksAPI.ts";
 import {CommonAPIType, TasksType, TaskType} from "../api/commonAPI.ts";
-import {TaskPriorities, TaskStatuses} from "../type.ts";
+import {TaskPriorities, TaskStatuses} from "../state/type.ts";
 
 
 export default {

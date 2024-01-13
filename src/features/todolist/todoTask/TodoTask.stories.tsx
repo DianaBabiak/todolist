@@ -1,8 +1,12 @@
 import type {Meta, StoryObj} from '@storybook/react';
-import {initialGlobalState, ReduxStoreProviderDecorator} from "../../state/decorators/ReduxStoreProviderDecorator.tsx";
+import {
+    idTodoOne,
+    initialGlobalState,
+    ReduxStoreProviderDecorator
+} from "../../../state/decorators/ReduxStoreProviderDecorator.tsx";
 import {TodoTask} from "./TodoTask.tsx";
 import {action} from "@storybook/addon-actions";
-import {idTodoOne} from "../../state/todolistReducer.ts";
+
 
 
 const meta: Meta<typeof TodoTask> = {

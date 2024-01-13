@@ -1,7 +1,12 @@
-import {TaskType} from "./api/commonAPI.ts";
+import {TaskType, TodolistType} from "../api/commonAPI.ts";
 
+
+export interface TodolistStateType extends TodolistType{
+    entityStatus: StatusLoading
+}
 
 export type TodoTasksType = Record<string, TaskType[]>
+
 
 export enum TodoItemFilter {
     All = 'All',
@@ -22,4 +27,11 @@ export enum TaskPriorities {
     Hi=2,
     Urgently=3,
     Later=4
+}
+
+export enum StatusLoading {
+    idle="idle" ,
+    loading="loading",
+    succeeded= "succeeded",
+    failed= "failed"
 }

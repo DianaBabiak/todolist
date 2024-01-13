@@ -1,12 +1,15 @@
 import {ChangeEvent, KeyboardEvent, useCallback, useState} from "react";
 
 
-export const useEditableSpan = (onEditHandler: (newLabel: string) => void, label:string)=>{
+export const useEditableSpan = (onEditHandler: (newLabel: string) => void, label:string, disabled?:boolean)=>{
     const [editMode, setEditMode] = useState(false)
     const [editLabel, setEditLabel] = useState('')
     const [error, setError] = useState<null | string>(null)
 
     const onDoubleClickHandler = useCallback(() => {
+        if(disabled){
+            return
+        }
         setEditMode(true)
         setEditLabel(label)
 

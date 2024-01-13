@@ -1,6 +1,6 @@
 import type {Meta, StoryObj} from '@storybook/react';
 import App from "./App.tsx";
-import {ReduxStoreProviderDecorator} from "./state/decorators/ReduxStoreProviderDecorator.tsx";
+import {ReduxStoreProviderDecorator} from "../state/decorators/ReduxStoreProviderDecorator.tsx";
 
 
 
@@ -16,6 +16,7 @@ type Story = StoryObj<typeof App>;
 export const AppBasicExample: Story = {
 
     args: {
+        demo:true
 
     }
 }

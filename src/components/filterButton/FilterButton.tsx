@@ -1,4 +1,4 @@
-import {TodoItemFilter} from "../../type.ts";
+import {TodoItemFilter} from "../../state/type.ts";
 import Button from '@mui/material/Button';
 import {memo} from "react";
 

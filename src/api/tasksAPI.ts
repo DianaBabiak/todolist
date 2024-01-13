@@ -8,7 +8,7 @@ export const tasksAPI = {
             })
     },
     createTask(todolistId:string,title:string) {
-        return instance.post<CommonAPIType>(`todo-lists/${todolistId}/tasks`,{title})
+        return instance.post<CommonAPIType<{item:TaskType}>>(`todo-lists/${todolistId}/tasks`,{title})
             .then((res) => {
                 console.log ('res', res)
                 return  res.data

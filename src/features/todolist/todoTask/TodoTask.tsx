@@ -1,12 +1,12 @@
-import '../../App.css'
-import {EditableSpan} from "../editableSpan/EditableSpan.tsx";
+import '../../../app/App.css'
+import {EditableSpan} from "../../../components/editableSpan/EditableSpan.tsx";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {CheckBox} from "../checkBoks/CheckBox.tsx";
+import {CheckBox} from "../../../components/checkBoks/CheckBox.tsx";
 import {memo, useCallback} from "react";
 import styles from "./TodoTask.module.scss"
-import {TaskType} from "../../api/commonAPI.ts";
-import {TaskStatuses} from "../../type.ts";
+import {TaskType} from "../../../api/commonAPI.ts";
+import {TaskStatuses} from "../../../state/type.ts";
 
 
 interface TodoItemProps {
@@ -14,6 +14,7 @@ interface TodoItemProps {
     handlerDeleteTodoTask: (idTask: string) => void
     onChangeCheckedHandler:(idItem: string, status:TaskStatuses) => void
     onEditTodoItem: (idTask:string, newLabel:string) => void
+
 
 }
 

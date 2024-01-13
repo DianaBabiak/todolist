@@ -1,7 +1,7 @@
 import type {Meta, StoryObj} from '@storybook/react';
 import {action} from '@storybook/addon-actions'
 import {FilterButton} from "./FilterButton.tsx";
-import {TodoItemFilter} from "../../type.ts";
+import {TodoItemFilter} from "../../state/type.ts";
 
 
 

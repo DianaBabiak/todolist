@@ -1,13 +1,13 @@
-import './App.css';
+import './app/App.css';
 import {v1} from "uuid";
-import {Todolist} from "./components/todolist/Todolist.tsx";
+import {Todolist} from "./features/todolist/Todolist.tsx";
 import {useReducer} from "react";
 import {AddField} from "./components/addField/AddField.tsx";
 import {AppBarComponent} from "./components/appBarComponent/AppBarComponent.tsx";
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import {addTodolistCA, deleteTodolistCA, editTodolistCA, todolistReducer} from "./state/todolistReducer.ts";
+import {addTodolistCA, deleteTodolistCA, editTodolistCA, todolistReducer} from "./state/todolists/todolistReducer.ts";
 import {
     addTaskCA,
     addTodoCA,
@@ -15,7 +15,7 @@ import {
     deleteTaskCA,
     deleteTodoCA, editTitleTask,
     tasksReducer
-} from "./state/tasksReduser.ts";
+} from "./state/tasks/tasksReduser.ts";
 
 
 function App() {

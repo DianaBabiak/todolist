@@ -1,13 +1,11 @@
 import {useCallback, useState} from "react";
-import {TaskStatuses, TodoItemFilter} from "../type.ts";
+import {TaskStatuses, TodoItemFilter} from "../state/type.ts";
 import {useAppDispatch, useAppSelector} from "../state/store.ts";
-import {deleteTodolistTC, editTitleTodolistTC} from "../state/todolistReducer.ts";
+import {deleteTodolistTC, editTitleTodolistTC} from "../state/todolists/todolistReducer.ts";
 import {
-    changeCheckedTaskTC,
     createTaskTC,
-    deleteTaskTC,
-    editTitleTaskTC
-} from "../state/tasksReduser.ts";
+    deleteTaskTC, updateTaskTC
+} from "../state/tasks/tasksReduser.ts";
 
 
 export const useTodolist = (id: string) => {
@@ -38,7 +36,7 @@ export const useTodolist = (id: string) => {
     }, [dispatch, id])
 
     const onChangeChecked = useCallback((idTask: string, status: TaskStatuses) => {
-        dispatch(changeCheckedTaskTC(id, idTask, status))
+        dispatch(updateTaskTC(id, idTask, {status:status}))
     }, [dispatch, id])
 
     const onClickFilterButtonHandler = useCallback((activeStatus: TodoItemFilter) => {
@@ -53,7 +51,7 @@ export const useTodolist = (id: string) => {
     }, [dispatch, id])
 
     const onEditTodoItemHandler = useCallback((idTask: string, newLabel: string) => {
-        dispatch(editTitleTaskTC(id, idTask, newLabel))
+        dispatch(updateTaskTC(id, idTask, {title: newLabel}))
     }, [dispatch, id])
 
 

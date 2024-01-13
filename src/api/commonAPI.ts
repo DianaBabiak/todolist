@@ -1,5 +1,5 @@
 import axios from "axios";
-import {TaskPriorities, TaskStatuses} from "../type.ts";
+import { TaskPriorities, TaskStatuses} from "../state/type.ts";
 
 export const settings = {
     withCredentials: true,
@@ -39,18 +39,18 @@ export interface TasksType  {
     error: null|string
 }
 
-export type CommonAPIType<Data=object> = {
+export type CommonAPIType<D=object> = {
     resultCode: number
     messages: string[],
-    data: Data,
+    data: D,
     fieldsErrors:[]
 }
 
 export type UpdatePutTaskType = {
-    title?: string
-    description?: string | null
-    status?: TaskStatuses
-    priority?: TaskPriorities
-    startDate?: null | string
-    deadline?: null | string
+    title: string
+    description: string | null
+    status: TaskStatuses
+    priority: TaskPriorities
+    startDate: null | string
+    deadline: null | string
 }
