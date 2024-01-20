@@ -125,6 +125,7 @@ export const deleteTaskTC = (idTodo: string, idTask: string): AppThunkResult => 
         if (result.resultCode === 0) {
             dispatch(deleteTaskCA(idTodo, idTask))
             dispatch(changeStatusLoadingAC(StatusLoading.succeeded))
+            return
         }
         errorWithStatus200(result,dispatch)
     } catch (error: unknown) {
@@ -139,6 +140,7 @@ export const createTaskTC = (idTodo: string, newTitle: string): AppThunkResult =
         if (result.resultCode === 0) {
             dispatch(addTaskCA(result.data.item))
             dispatch(changeStatusLoadingAC(StatusLoading.succeeded))
+            return
         }
         errorWithStatus200(result,dispatch)
     } catch (error: unknown) {
@@ -179,6 +181,7 @@ export const updateTaskTC = (idTodo: string, idTask: string, modelTask: UpdateTa
         if (result.resultCode === 0) {
             dispatch(updateTaskCA(result.data.item))
             dispatch(changeStatusLoadingAC(StatusLoading.succeeded))
+            return
         }
         errorWithStatus200(result,dispatch)
     } catch (error: unknown) {

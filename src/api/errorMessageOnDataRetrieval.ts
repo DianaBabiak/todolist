@@ -4,11 +4,14 @@ import {Dispatch} from "redux";
 
 
 export const errorMessageOnDataRetrieval= (error:unknown, dispatch:Dispatch)=>{
-    if (axios.isAxiosError(error)) {
-        console.log('err getTask', error)
-        dispatch(changeErrorMessageAC(error.response?.data?.message || 'An error occurred'));
+    if (axios.isAxiosError<ErrorType>(error)) {
+        const err:string = error.response? error.response?.data.message: error.message
+        dispatch(changeErrorMessageAC(err || 'An error occurred'));
     } else {
-        console.log('err getTask', error);
-        dispatch(changeErrorMessageAC('An error occurred'));
+        dispatch(changeErrorMessageAC((error as Error).message || 'An error occurred'));
     }
+}
+
+type ErrorType = {
+    message:string
 }

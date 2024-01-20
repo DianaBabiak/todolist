@@ -5,11 +5,12 @@ import {memo} from "react";
 interface CheckBoxProps {
     checked: boolean
     onChange: () => void
+    disabled?:boolean
 }
-export const CheckBox = memo(({checked, onChange}: CheckBoxProps) => {
+export const CheckBox = memo(({checked, onChange,disabled}: CheckBoxProps) => {
 
     return (
-        <Checkbox checked={checked} onChange={onChange} defaultChecked color="secondary"/>
+        <Checkbox disabled={disabled} checked={checked} onChange={onChange} defaultChecked color="secondary"/>
 
 
     )

@@ -84,6 +84,7 @@ export const createTodolistTC = (newTitle: string): AppThunkResult => async (dis
             dispatch(addTodolistCA(result.data.item))
             dispatch(addTodoCA(result.data.item.id))
             dispatch(changeStatusLoadingAC(StatusLoading.succeeded))
+            return
         }
         errorWithStatus200(result,dispatch)
 
@@ -101,6 +102,7 @@ export const deleteTodolistTC = (id: string): AppThunkResult => async (dispatch)
             dispatch(deleteTodolistCA(id))
             dispatch(deleteTodoCA(id))
             dispatch(changeStatusLoadingAC(StatusLoading.succeeded))
+            return
         }
         errorWithStatus200(result,dispatch)
     } catch (error: unknown) {
@@ -115,6 +117,7 @@ export const editTitleTodolistTC = (id: string, newTitle: string): AppThunkResul
         if (result.resultCode === 0) {
             dispatch(editTodolistCA(id, newTitle))
             dispatch(changeStatusLoadingAC(StatusLoading.succeeded))
+            return
         }
         errorWithStatus200(result,dispatch)
     } catch (error: unknown) {

@@ -54,3 +54,16 @@ export type UpdatePutTaskType = {
     startDate: null | string
     deadline: null | string
 }
+
+export interface AuthUserType {
+    id: null | number
+    email: null | string
+    login: null | string
+}
+
+export interface UserType {
+    email:string,
+    password:string,
+    rememberMe?:boolean,
+    captcha?:string
+}
