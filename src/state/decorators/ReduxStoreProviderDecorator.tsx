@@ -118,7 +118,14 @@ export const initialGlobalState:RootReducerType = {
     },
     app:{
         statusLoading: StatusLoading.idle,
-        errorMessage:null
+        errorMessage:null,
+        isAuth:true,
+        authUser:{
+            id: 2,
+            email: "dibabiak@gmail.com",
+            login: "Dziana"
+
+        }
     }
 };
 export type RootReducerTypeRoot = ReturnType<typeof rootReducer>

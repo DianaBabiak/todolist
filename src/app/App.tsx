@@ -4,7 +4,7 @@ import Container from '@mui/material/Container';
 import {useAppDispatch, useAppSelector} from "../state/store.ts";
 import {ErrorMessage} from "../components/errorMessage/ErrorMessage.tsx";
 import {StatusLoading} from "../state/type.ts";
-import {LinearIndeterminate} from "../components/loading/Loading.tsx";
+import {LinearIndeterminate} from "../components/loading/LinearIndeterminate.tsx";
 import {Login} from "../components/login/Login.tsx";
 import { Routes, Route} from "react-router-dom"
 import {TodolistsPage} from "../features/todolistsPage/TodolistsPage.tsx";
@@ -17,10 +17,15 @@ interface AppProps {
 }
 function App({demo=false}:AppProps) {
     const statusLoading = useAppSelector(({app})=>app.statusLoading)
+    const initialization = useAppSelector(({app})=>app.initialization)
     const dispatch = useAppDispatch()
     useEffect(()=>{
         dispatch(getAuthTC())
     },[dispatch])
+
+    if(!initialization){
+        return <LinearIndeterminate/>
+    }
 
     return (
         <div className="App">

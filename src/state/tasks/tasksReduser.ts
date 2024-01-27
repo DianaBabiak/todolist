@@ -1,151 +1,109 @@
 import {StatusLoading, TaskPriorities, TaskStatuses, TodoTasksType} from "../type.ts";
-import {TasksType, TaskType, UpdatePutTaskType} from "../../api/commonAPI.ts";
-import {GetTodolistsCAType} from "../todolists/todolistReducer.ts";
+import {TaskType, UpdatePutTaskType} from "../../api/commonAPI.ts";
+import {
+    addTodolistCA,
+    deleteTodolistCA,
+    getTodolistsCA,
+} from "../todolists/todolistReducer.ts";
 import {AppThunkResult} from "../store.ts";
 import {tasksAPI} from "../../api/tasksAPI.ts";
 import {changeStatusLoadingAC} from "../app/appReducer.ts";
 import {errorMessageOnDataRetrieval} from "../../api/errorMessageOnDataRetrieval.ts";
 import {errorWithStatus200} from "../../api/errorWithStatus200.ts";
-
-export type ActionTasksType =
-    | DeleteTodolistCAType
-    | DeleteTaskCAType
-    | AddTodoCAType
-    | AddTaskCAType
-    | UpdateTaskCAType
-    | GetTasksCAType
-    | GetTodolistsCAType
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {clearTasksAndTodolists} from "../commonActions.ts";
 
 const initialState: TodoTasksType = {}
-export const tasksReducer = (state: TodoTasksType = initialState, action: ActionTasksType): TodoTasksType => {
-    switch (action.type) {
-        case "DELETE TODO": {
-            const updatedTasks = {...state};
-            delete updatedTasks[action.payload.idTodo];
-            return updatedTasks
-        }
-        case "DELETE TASK": {
-            const {idTodo, idTask} = action.payload as DeleteTaskCAType['payload']
-            return {...state, [idTodo]: state[idTodo].filter(item => item.id !== idTask)}
-        }
-        case "ADD EMPTY ARRAY TASK": {
-            return {...state, [action.payload.idTodo]: []}
-        }
-        case "ADD TASK": {
-            const {data} = action.payload as AddTaskCAType['payload']
-            return {...state, [data.todoListId]: [...state[data.todoListId], data]}
-        }
-        case "UPDATE_TASK": {
-            const {task} = action.payload as UpdateTaskCAType['payload']
-            return {
-                ...state,
-                [task.todoListId]: state[task.todoListId].map(t => task.id === t.id
-                    ? {...task}
-                    : t)
-            }
-        }
-        case "GET TASKS FROM API": {
-            const {payload} = action as GetTasksCAType
-            return {
-                ...state,
-                [payload.idTodo]: payload.data.items
-            }
-        }
-        case "GET TODOLISTS FROM API": {
-            const {payload} = action as GetTodolistsCAType
-            return payload.data.reduce<TodoTasksType>((acc, todo) => {
-                return {...acc, [todo.id]: []}
-            }, state)
-        }
-        default:
-            return state
-    }
-}
 
-type DeleteTodolistCAType = ReturnType<typeof deleteTodoCA>
-export const deleteTodoCA = (idTodo: string) => ({
-        type: "DELETE TODO",
-        payload: {
-            idTodo
+const tasksSlice = createSlice({
+    name: 'task',
+    initialState,
+    reducers: {
+        deleteTaskCA(state, action: PayloadAction<{ idTodo: string, idTask: string }>) {
+            const tasks = state[action.payload.idTodo];
+            const index = tasks.findIndex((t) => t.id === action.payload.idTask);
+            if (index !== -1) tasks.splice(index, 1)
+        },
+        addTaskCA(state, action: PayloadAction<{ data: TaskType }>) {
+            state[action.payload.data.todoListId].unshift(action.payload.data)
+        },
+        updateTaskCA(state, action: PayloadAction<{ task: TaskType }>) {
+            const index = state[action.payload.task.todoListId].findIndex(t => action.payload.task.id === t.id)
+            if (index !== -1) {
+                state[action.payload.task.todoListId][index] = {...action.payload.task}
+            }
+        },
+        getTasksCA(state, action: PayloadAction<{ idTodo: string, data: TaskType[] }>) {
+            state[action.payload.idTodo] = action.payload.data
+
+
         }
-    } as const)
-type DeleteTaskCAType = ReturnType<typeof deleteTaskCA>
-export const deleteTaskCA = (idTodo: string, idTask: string) => ({
-        type: "DELETE TASK",
-        payload: {
-            idTodo,
-            idTask
-        }
-    } as const)
-type AddTodoCAType = ReturnType<typeof addTodoCA>
-export const addTodoCA = (idTodo: string) => ({
-        type: "ADD EMPTY ARRAY TASK",
-        payload: {
-            idTodo
-        }
-    } as const)
-type AddTaskCAType = ReturnType<typeof addTaskCA>
-export const addTaskCA = (data: TaskType) => ({
-        type: "ADD TASK",
-        payload: {
-            data
-        }
-    } as const)
-type UpdateTaskCAType = ReturnType<typeof updateTaskCA>
-export const updateTaskCA = (task:TaskType) => ({
-        type: "UPDATE_TASK",
-        payload: {
-            task
-        }
-    } as const)
-type GetTasksCAType = ReturnType<typeof getTasksCA>
-export const getTasksCA = (idTodo: string, data: TasksType) => ({
-        type: "GET TASKS FROM API",
-        payload: {
-            idTodo,
-            data
-        }
-    } as const)
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(clearTasksAndTodolists, () => {
+                return {};
+            })
+            .addCase(getTodolistsCA, (state, action) => {
+                console.log("+++++++++++")
+                action.payload.data.forEach((tl) => {
+                    state[tl.id] = [];
+                })
+            })
+            .addCase(deleteTodolistCA, (state, action) => {
+                delete state[action.payload.idTodo];
+            })
+            .addCase(addTodolistCA, (state, action) => {
+                state[action.payload.data.id] = []
+            })
+
+    }
+})
+
+export const tasksReducer = tasksSlice.reducer
+
+export const {deleteTaskCA, getTasksCA, addTaskCA, updateTaskCA} = tasksSlice.actions
+
 
 export const getTasksTC = (id: string): AppThunkResult => async (dispatch) => {
-    dispatch(changeStatusLoadingAC(StatusLoading.loading))
-    try{
-        const result= await tasksAPI.getTasks(id)
-        dispatch(getTasksCA(id, result))
-        dispatch(changeStatusLoadingAC(StatusLoading.succeeded))
+    dispatch(changeStatusLoadingAC({ statusLoading: StatusLoading.loading }))
+    try {
+        const result = await tasksAPI.getTasks(id)
+        dispatch(getTasksCA({idTodo:id, data:result.items}))
+        dispatch(changeStatusLoadingAC({statusLoading:StatusLoading.succeeded}))
     } catch (error: unknown) {
-        errorMessageOnDataRetrieval(error,dispatch)
-        dispatch(changeStatusLoadingAC(StatusLoading.failed))
-        }
+        errorMessageOnDataRetrieval(error, dispatch)
+        dispatch(changeStatusLoadingAC({statusLoading:StatusLoading.failed}))
+    }
 }
 export const deleteTaskTC = (idTodo: string, idTask: string): AppThunkResult => async (dispatch) => {
-    dispatch(changeStatusLoadingAC(StatusLoading.loading))
+    dispatch(changeStatusLoadingAC({ statusLoading: StatusLoading.loading }))
     try {
         const result = await tasksAPI.deleteTask(idTodo, idTask)
         if (result.resultCode === 0) {
-            dispatch(deleteTaskCA(idTodo, idTask))
-            dispatch(changeStatusLoadingAC(StatusLoading.succeeded))
+            dispatch(deleteTaskCA({idTodo,idTask}))
+            dispatch(changeStatusLoadingAC({statusLoading:StatusLoading.succeeded}))
             return
         }
-        errorWithStatus200(result,dispatch)
+        errorWithStatus200(result, dispatch)
     } catch (error: unknown) {
-        errorMessageOnDataRetrieval(error,dispatch)
-        dispatch(changeStatusLoadingAC(StatusLoading.failed))
+        errorMessageOnDataRetrieval(error, dispatch)
+        dispatch(changeStatusLoadingAC({statusLoading:StatusLoading.failed}))
     }
 }
 export const createTaskTC = (idTodo: string, newTitle: string): AppThunkResult => async (dispatch) => {
-    dispatch(changeStatusLoadingAC(StatusLoading.loading))
+    dispatch(changeStatusLoadingAC({ statusLoading: StatusLoading.loading }))
     try {
         const result = await tasksAPI.createTask(idTodo, newTitle)
         if (result.resultCode === 0) {
-            dispatch(addTaskCA(result.data.item))
-            dispatch(changeStatusLoadingAC(StatusLoading.succeeded))
+            dispatch(addTaskCA({data:result.data.item}))
+            dispatch(changeStatusLoadingAC({statusLoading:StatusLoading.succeeded}))
             return
         }
-        errorWithStatus200(result,dispatch)
+        errorWithStatus200(result, dispatch)
     } catch (error: unknown) {
-        errorMessageOnDataRetrieval(error,dispatch)
-        dispatch(changeStatusLoadingAC(StatusLoading.failed))
+        errorMessageOnDataRetrieval(error, dispatch)
+        dispatch(changeStatusLoadingAC({statusLoading:StatusLoading.failed}))
     }
 }
 
@@ -158,7 +116,7 @@ export type UpdateTaskType = {
     deadline?: null | string
 }
 export const updateTaskTC = (idTodo: string, idTask: string, modelTask: UpdateTaskType): AppThunkResult => async (dispatch, getState) => {
-    dispatch(changeStatusLoadingAC(StatusLoading.loading))
+    dispatch(changeStatusLoadingAC({ statusLoading: StatusLoading.loading }))
     try {
         const state = getState()
         const tasks = state.tasks[idTodo]
@@ -179,14 +137,14 @@ export const updateTaskTC = (idTodo: string, idTask: string, modelTask: UpdateTa
         }
         const result = await tasksAPI.updateTask(idTodo, idTask, model)
         if (result.resultCode === 0) {
-            dispatch(updateTaskCA(result.data.item))
-            dispatch(changeStatusLoadingAC(StatusLoading.succeeded))
+            dispatch(updateTaskCA({task:result.data.item}))
+            dispatch(changeStatusLoadingAC({statusLoading:StatusLoading.succeeded}))
             return
         }
-        errorWithStatus200(result,dispatch)
+        errorWithStatus200(result, dispatch)
     } catch (error: unknown) {
-        errorMessageOnDataRetrieval(error,dispatch)
-        dispatch(changeStatusLoadingAC(StatusLoading.failed))
+        errorMessageOnDataRetrieval(error, dispatch)
+        dispatch(changeStatusLoadingAC({statusLoading:StatusLoading.failed}))
     }
 }
 

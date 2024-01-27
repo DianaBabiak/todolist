@@ -8,8 +8,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import style from "./Todolist.module.scss"
 import {FilterButton} from "../../components/filterButton/FilterButton.tsx";
 import {useTodolist} from "../../hooks/useTodolist.ts";
-import {getTasksTC} from "../../state/tasks/tasksReduser.ts";
-import {useAppDispatch} from "../../state/store.ts";
 
 interface TodoListProps {
     todo: TodolistStateType
@@ -18,7 +16,7 @@ interface TodoListProps {
 }
 
 export const Todolist = memo(({todo, demo = false}: TodoListProps) => {
-    const dispatch = useAppDispatch()
+
 
     const {
         status,
@@ -36,8 +34,7 @@ export const Todolist = memo(({todo, demo = false}: TodoListProps) => {
         if (demo){
             return
         }
-       dispatch(getTasksTC(todo.id))
-    }, [dispatch, todo.id])
+    }, [demo])
 
     return (
         <div className={style.wrapper}>
