@@ -1,56 +1,61 @@
-import {memo,} from "react";
-import Typography, {TypographyProps} from '@mui/material/Typography';
-import {useEditableSpan} from "../../hooks/useEditableSpan.ts";
-
+import { memo } from "react";
+import Typography, { TypographyProps } from "@mui/material/Typography";
+import { useEditableSpan } from "../../hooks/useEditableSpan.ts";
 
 interface EditableSpanProps {
-    label: string
-    onEditHandler: (newLabel: string) => void
-    variantTypography: TypographyProps['variant']
-    disabled?:boolean
-
+  label: string;
+  onEditHandler: (newLabel: string) => void;
+  variantTypography: TypographyProps["variant"];
+  disabled?: boolean;
 }
 
-export const EditableSpan = memo(({label, onEditHandler, variantTypography, disabled}: EditableSpanProps) => {
+export const EditableSpan = memo(
+  ({
+    label,
+    onEditHandler,
+    variantTypography,
+    disabled,
+  }: EditableSpanProps) => {
     const {
-        editMode,
-        error,
-        editLabel,
-        onBlurHandler,
-        onChangeLabelHandler,
-        onKeyDownEdit,
-        onDoubleClickHandler
-    } = useEditableSpan(onEditHandler, label, disabled)
+      editMode,
+      error,
+      editLabel,
+      onBlurHandler,
+      onChangeLabelHandler,
+      onKeyDownEdit,
+      onDoubleClickHandler,
+    } = useEditableSpan(onEditHandler, label, disabled);
 
     return (
-
-        <>
-            {editMode ? (
-                <input
-                    value={editLabel}
-                    autoFocus
-                    onBlur={onBlurHandler}
-                    onChange={onChangeLabelHandler}
-                    onKeyDown={onKeyDownEdit}
-                    className={error ? 'error' : ''}
-                />
-            ) : (
-                <>
-                    <Typography style={{
-                        margin: '0',
-                        display: 'flex',
-                        alignItems: 'end',
-                        paddingBottom: '5px'
-                    }} onDoubleClick={onDoubleClickHandler} variant={variantTypography} gutterBottom>
-
-
-                        {label}
-                    </Typography>
-                    {error && <div className='errorMessage'>{error}</div>}
-                </>
-            )}
-        </>
+      <>
+        {editMode ? (
+          <input
+            value={editLabel}
+            autoFocus
+            onBlur={onBlurHandler}
+            onChange={onChangeLabelHandler}
+            onKeyDown={onKeyDownEdit}
+            className={error ? "error" : ""}
+          />
+        ) : (
+          <>
+            <Typography
+              style={{
+                margin: "0",
+                display: "flex",
+                alignItems: "end",
+                paddingBottom: "5px",
+              }}
+              onDoubleClick={onDoubleClickHandler}
+              variant={variantTypography}
+              gutterBottom
+            >
+              {label}
+            </Typography>
+            {error && <div className="errorMessage">{error}</div>}
+          </>
+        )}
+      </>
     );
-
-
-})
+  },
+);

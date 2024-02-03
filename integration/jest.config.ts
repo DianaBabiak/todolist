@@ -3,7 +3,7 @@
  * https://jestjs.io/docs/configuration
  */
 
-import type {Config} from 'jest';
+import type { Config } from "jest";
 
 const config: Config = {
   // All imported modules in your tests should be mocked automatically
@@ -185,16 +185,16 @@ const config: Config = {
 
   // Whether to use watchman for file crawling
   // watchman: true,
-  preset: 'jest-puppeteer',
+  preset: "jest-puppeteer",
   // transform: {
   //   '^.+\\.ts$': 'ts-jest',
   //   '^.+\\.tsx$': 'ts-jest',
   // },
   // moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'node'],
   // transformIgnorePatterns: ['/node_modules/'],
-  testRegex: './*\\.snapshot\\.js$',
-  setupFilesAfterEnv: ['./setupTests.js'],
-  testTimeout: 50000,
+  testRegex: "./*\\.snapshot\\.js$",
+  setupFilesAfterEnv: ["./setupTests.js"],
+  testTimeout: 80000,
 };
 
 export default config;

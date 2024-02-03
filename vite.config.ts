@@ -7,11 +7,11 @@
 // })
 
 // vite.config.js
-import { defineConfig } from 'vite'
-import dns from 'dns'
+import { defineConfig } from "vite";
+import dns from "dns";
 
-dns.setDefaultResultOrder('verbatim')
+dns.setDefaultResultOrder("verbatim");
 
 export default defineConfig({
   // omit
-})
+});

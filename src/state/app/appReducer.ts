@@ -1,113 +1,158 @@
-import {StatusLoading} from "../type.ts";
-import {authAPI} from "../../api/authAPI.ts";
-import {errorWithStatus200} from "../../api/errorWithStatus200.ts";
-import {errorMessageOnDataRetrieval} from "../../api/errorMessageOnDataRetrieval.ts";
-import {AppThunkResult} from "../store.ts";
-import {AuthUserType, UserType} from "../../api/commonAPI.ts";
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {clearTasksAndTodolists} from "../commonActions.ts";
+import { StatusLoading } from "../type.ts";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { clearTasksAndTodolists } from "../commonActions.ts";
+import { AuthUserType, UserType } from "../../api/commonAPI.ts";
+import { authAPI } from "../../api/authAPI.ts";
+import { errorWithStatus200 } from "../../api/errorWithStatus200.ts";
+import { errorMessageOnDataRetrieval } from "../../api/errorMessageOnDataRetrieval.ts";
 
 export interface AppDataType {
-    statusLoading: StatusLoading
-    errorMessage: string | null
-    isAuth: boolean
-    authUser: AuthUserType
-    initialization: boolean
+  statusLoading: StatusLoading;
+  errorMessage: string | null;
+  isAuth: boolean;
+  authUser: AuthUserType;
+  initialization: boolean;
 }
 
 const initialState: AppDataType = {
-    statusLoading: StatusLoading.idle,
-    errorMessage: null,
-    isAuth: false,
-    authUser: {
-        id: null,
-        email: null,
-        login: null
-    },
-    initialization: false
-}
+  statusLoading: StatusLoading.idle,
+  errorMessage: null,
+  isAuth: false,
+  authUser: {
+    id: null,
+    email: null,
+    login: null,
+  },
+  initialization: false,
+};
+
+export const getAuthTC = createAsyncThunk(
+  "users/fetchByIdStatus",
+  async (_, thunkAPI) => {
+    thunkAPI.dispatch(
+      changeStatusLoadingAC({ statusLoading: StatusLoading.loading }),
+    );
+    try {
+      const result = await authAPI.getAuth();
+      if (result.resultCode === 0) {
+        thunkAPI.dispatch(
+          changeStatusLoadingAC({ statusLoading: StatusLoading.succeeded }),
+        );
+        return result.data;
+      }
+      return thunkAPI.rejectWithValue(
+        errorWithStatus200(result, thunkAPI.dispatch),
+      );
+    } catch (error: unknown) {
+      thunkAPI.dispatch(
+        changeStatusLoadingAC({ statusLoading: StatusLoading.failed }),
+      );
+      return thunkAPI.rejectWithValue(
+        errorMessageOnDataRetrieval(error, thunkAPI.dispatch),
+      );
+    } finally {
+      thunkAPI.dispatch(initializationAppCA({ initialization: true }));
+    }
+  },
+);
+
+export const authorizationUserTC = createAsyncThunk(
+  "users/authorizationUserTC",
+  async (user: UserType, thunkAPI) => {
+    thunkAPI.dispatch(
+      changeStatusLoadingAC({ statusLoading: StatusLoading.loading }),
+    );
+    try {
+      const result = await authAPI.postAuth(user);
+      if (result.resultCode === 0) {
+        thunkAPI.dispatch(getAuthTC());
+        thunkAPI.dispatch(
+          changeStatusLoadingAC({ statusLoading: StatusLoading.succeeded }),
+        );
+        return;
+      }
+      return thunkAPI.rejectWithValue(
+        errorWithStatus200(result, thunkAPI.dispatch),
+      );
+    } catch (error: unknown) {
+      thunkAPI.dispatch(
+        changeStatusLoadingAC({ statusLoading: StatusLoading.failed }),
+      );
+      return thunkAPI.rejectWithValue(
+        errorMessageOnDataRetrieval(error, thunkAPI.dispatch),
+      );
+    }
+  },
+);
+
+export const logoutUserTC = createAsyncThunk(
+  "users/logoutUserTC",
+  async (_, thunkAPI) => {
+    thunkAPI.dispatch(
+      changeStatusLoadingAC({ statusLoading: StatusLoading.loading }),
+    );
+    try {
+      const result = await authAPI.deleteAuth();
+      if (result.resultCode === 0) {
+        thunkAPI.dispatch(logoutUserAC());
+        thunkAPI.dispatch(
+          changeStatusLoadingAC({ statusLoading: StatusLoading.succeeded }),
+        );
+        thunkAPI.dispatch(clearTasksAndTodolists());
+        return;
+      }
+      return thunkAPI.rejectWithValue(
+        errorWithStatus200(result, thunkAPI.dispatch),
+      );
+    } catch (error: unknown) {
+      thunkAPI.dispatch(
+        changeStatusLoadingAC({ statusLoading: StatusLoading.failed }),
+      );
+      return thunkAPI.rejectWithValue(
+        errorMessageOnDataRetrieval(error, thunkAPI.dispatch),
+      );
+    }
+  },
+);
 
 const appSlice = createSlice({
-    name: 'app',
-    initialState,
-    reducers: {
-        changeStatusLoadingAC(state, action: PayloadAction<{ statusLoading: StatusLoading }>) {
-            state.statusLoading = action.payload.statusLoading
-        },
-        changeErrorMessageAC(state, action: PayloadAction<{ errorMessage: string | null }>) {
-            state.errorMessage = action.payload.errorMessage
-        },
-        getAuthCA(state, action: PayloadAction<{ user: AuthUserType }>) {
-            state.isAuth = true
-            state.authUser = action.payload.user
-        },
-        logoutUserAC(state) {
-            state.isAuth = false
-            state.authUser = {id: null, email: null, login: null}
-        },
-        initializationAppCA(state, action: PayloadAction<{ initialization: boolean }>) {
-            state.initialization = action.payload.initialization
-        },
-
-
-    }
-})
-export const appReducer = appSlice.reducer
+  name: "app",
+  initialState,
+  reducers: {
+    changeStatusLoadingAC(
+      state,
+      action: PayloadAction<{ statusLoading: StatusLoading }>,
+    ) {
+      state.statusLoading = action.payload.statusLoading;
+    },
+    changeErrorMessageAC(
+      state,
+      action: PayloadAction<{ errorMessage: string | null }>,
+    ) {
+      state.errorMessage = action.payload.errorMessage;
+    },
+    logoutUserAC(state) {
+      state.isAuth = false;
+      state.authUser = { id: null, email: null, login: null };
+    },
+    initializationAppCA(
+      state,
+      action: PayloadAction<{ initialization: boolean }>,
+    ) {
+      state.initialization = action.payload.initialization;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getAuthTC.fulfilled, (state, action) => {
+      state.isAuth = true;
+      state.authUser = action.payload as AuthUserType;
+    });
+  },
+});
+export const appReducer = appSlice.reducer;
 export const {
-    changeStatusLoadingAC,
-    changeErrorMessageAC,
-    getAuthCA,
-    logoutUserAC,
-    initializationAppCA
-} = appSlice.actions
-
-export const getAuthTC = (): AppThunkResult => async (dispatch) => {
-    dispatch(changeStatusLoadingAC({statusLoading:StatusLoading.loading}))
-    try {
-        const result = await authAPI.getAuth()
-        if (result.resultCode === 0) {
-            dispatch(getAuthCA({user:result.data}))
-            dispatch(changeStatusLoadingAC({statusLoading:StatusLoading.succeeded}))
-            return
-        }
-        errorWithStatus200(result, dispatch)
-    } catch (error: unknown) {
-        errorMessageOnDataRetrieval(error, dispatch)
-        dispatch(changeStatusLoadingAC({statusLoading:StatusLoading.failed}))
-    } finally {
-        dispatch(initializationAppCA({initialization:true}))
-    }
-}
-
-export const authorizationUserTC = (user: UserType): AppThunkResult => async (dispatch) => {
-    dispatch(changeStatusLoadingAC({statusLoading:StatusLoading.loading}))
-    try {
-        const result = await authAPI.postAuth(user)
-        if (result.resultCode === 0) {
-            dispatch(getAuthTC())
-            dispatch(changeStatusLoadingAC({statusLoading:StatusLoading.succeeded}))
-            return
-        }
-        errorWithStatus200(result, dispatch)
-    } catch (error: unknown) {
-        errorMessageOnDataRetrieval(error, dispatch)
-        dispatch(changeStatusLoadingAC({statusLoading:StatusLoading.failed}))
-    }
-}
-
-export const logoutUserTC = (): AppThunkResult => async (dispatch) => {
-    dispatch(changeStatusLoadingAC({statusLoading:StatusLoading.loading}))
-    try {
-        const result = await authAPI.deleteAuth()
-        if (result.resultCode === 0) {
-            dispatch(logoutUserAC())
-            dispatch(changeStatusLoadingAC({statusLoading:StatusLoading.succeeded}))
-            dispatch(clearTasksAndTodolists())
-            return
-        }
-        errorWithStatus200(result, dispatch)
-    } catch (error: unknown) {
-        errorMessageOnDataRetrieval(error, dispatch)
-        dispatch(changeStatusLoadingAC({statusLoading:StatusLoading.failed}))
-    }
-}
+  changeStatusLoadingAC,
+  changeErrorMessageAC,
+  logoutUserAC,
+  initializationAppCA,
+} = appSlice.actions;

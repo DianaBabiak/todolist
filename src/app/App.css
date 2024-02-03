@@ -1,11 +1,7 @@
-
-
-
-.error{
-    border:solid red 1px
+.error {
+  border: solid red 1px;
 }
 
-.errorMessage{
-    color: red
+.errorMessage {
+  color: red;
 }
-

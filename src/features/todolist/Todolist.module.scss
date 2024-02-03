@@ -1,19 +1,16 @@
-.wrapper{
+.wrapper {
   display: flex;
   flex-direction: column;
   gap: 20px;
   padding: 20px;
-
-
 }
-.titleWrapper{
+.titleWrapper {
   display: flex;
   justify-content: space-between;
-  gap:16px;
-
+  gap: 16px;
 }
 
-.wrapperButtons{
+.wrapperButtons {
   display: flex;
   justify-content: center;
 }

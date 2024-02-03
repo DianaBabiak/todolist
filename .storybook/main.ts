@@ -7,15 +7,16 @@ const config: StorybookConfig = {
     "@storybook/addon-essentials",
     "@storybook/addon-onboarding",
     "@storybook/addon-interactions",
+    "storybook-addon-react-router-v6",
     {
-      name: '@storybook/addon-storysource',
+      name: "@storybook/addon-storysource",
       options: {
         rule: {
           test: [/\.stories\.tsx?$/],
         },
         loaderOptions: {
           prettierConfig: { printWidth: 80, singleQuote: false },
-          options:{parser: 'typescript'},
+          options: { parser: "typescript" },
           injectStoryParameters: false,
         },
       },
@@ -30,4 +31,3 @@ const config: StorybookConfig = {
   },
 };
 export default config;
-
