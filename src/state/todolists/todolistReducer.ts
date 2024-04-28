@@ -4,12 +4,13 @@ import { changeStatusLoadingAC } from "../app/appReducer.ts";
 import { errorMessageOnDataRetrieval } from "../../api/errorMessageOnDataRetrieval.ts";
 import { StatusLoading, TodolistStateType } from "../type.ts";
 import { errorWithStatus200 } from "../../api/errorWithStatus200.ts";
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { clearTasksAndTodolists } from "../commonActions.ts";
+import { createAppAsyncThunk } from "../../utils/createAppAsyncThunk.ts";
 
 const initialState: TodolistStateType[] = [];
 
-export const getTodolistsTC = createAsyncThunk(
+export const getTodolistsTC = createAppAsyncThunk(
   "todolist/getTodolistsTC",
   async (_, thunkAPI) => {
     thunkAPI.dispatch(
@@ -33,7 +34,7 @@ export const getTodolistsTC = createAsyncThunk(
   },
 );
 
-export const createTodolistTC = createAsyncThunk(
+export const createTodolistTC = createAppAsyncThunk(
   "todolist/createTodolistTC",
   async (newTitle: string, thunkAPI) => {
     thunkAPI.dispatch(
@@ -61,7 +62,7 @@ export const createTodolistTC = createAsyncThunk(
   },
 );
 
-export const deleteTodolistTC = createAsyncThunk(
+export const deleteTodolistTC = createAppAsyncThunk(
   "todolist/deleteTodolistTC",
   async (id: string, thunkAPI) => {
     thunkAPI.dispatch(
@@ -92,7 +93,7 @@ export const deleteTodolistTC = createAsyncThunk(
   },
 );
 
-export const editTitleTodolistTC = createAsyncThunk(
+export const editTitleTodolistTC = createAppAsyncThunk(
   "todolist/editTitleTodolistTC",
   async (data: { id: string; newTitle: string }, thunkAPI) => {
     thunkAPI.dispatch(

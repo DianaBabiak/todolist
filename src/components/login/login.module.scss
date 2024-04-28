@@ -1,0 +1,11 @@
+.formLabel{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 10px 0;
+  p{
+    margin: 5px 0;
+    font-size: 18px;
+  }
+}

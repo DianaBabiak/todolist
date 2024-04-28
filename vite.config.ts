@@ -12,6 +12,4 @@ import dns from "dns";
 
 dns.setDefaultResultOrder("verbatim");
 
-export default defineConfig({
-  // omit
-});
+export default defineConfig({});

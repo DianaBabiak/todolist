@@ -1,10 +1,11 @@
 import { StatusLoading } from "../type.ts";
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { clearTasksAndTodolists } from "../commonActions.ts";
 import { AuthUserType, UserType } from "../../api/commonAPI.ts";
 import { authAPI } from "../../api/authAPI.ts";
 import { errorWithStatus200 } from "../../api/errorWithStatus200.ts";
 import { errorMessageOnDataRetrieval } from "../../api/errorMessageOnDataRetrieval.ts";
+import { createAppAsyncThunk } from "../../utils/createAppAsyncThunk.ts";
 
 export interface AppDataType {
   statusLoading: StatusLoading;
@@ -26,7 +27,7 @@ const initialState: AppDataType = {
   initialization: false,
 };
 
-export const getAuthTC = createAsyncThunk(
+export const getAuthTC = createAppAsyncThunk(
   "users/fetchByIdStatus",
   async (_, thunkAPI) => {
     thunkAPI.dispatch(
@@ -56,7 +57,7 @@ export const getAuthTC = createAsyncThunk(
   },
 );
 
-export const authorizationUserTC = createAsyncThunk(
+export const authorizationUserTC = createAppAsyncThunk(
   "users/authorizationUserTC",
   async (user: UserType, thunkAPI) => {
     thunkAPI.dispatch(
@@ -85,7 +86,7 @@ export const authorizationUserTC = createAsyncThunk(
   },
 );
 
-export const logoutUserTC = createAsyncThunk(
+export const logoutUserTC = createAppAsyncThunk(
   "users/logoutUserTC",
   async (_, thunkAPI) => {
     thunkAPI.dispatch(

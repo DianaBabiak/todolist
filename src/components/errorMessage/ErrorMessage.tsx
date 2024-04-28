@@ -18,14 +18,14 @@ export function ErrorMessage() {
       return;
     }
 
-    dispatch(changeErrorMessageAC(null));
+    dispatch(changeErrorMessageAC({ errorMessage: null }));
   };
 
   return (
     <Stack spacing={2} sx={{ width: "100%" }}>
       <Snackbar
         open={!!errorMessage}
-        autoHideDuration={6000}
+        autoHideDuration={3000}
         onClose={handleClose}
       >
         <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>

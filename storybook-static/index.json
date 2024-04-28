@@ -1,0 +1,224 @@
+{
+  "v": 4,
+  "entries": {
+    "configure-your-project--docs": {
+      "id": "configure-your-project--docs",
+      "title": "Configure your project",
+      "name": "Docs",
+      "importPath": "./src/stories/Configure.mdx",
+      "storiesImports": [],
+      "type": "docs",
+      "tags": ["unattached-mdx", "docs"]
+    },
+    "app--app-basic-example": {
+      "type": "story",
+      "id": "app--app-basic-example",
+      "name": "App Basic Example",
+      "title": "App",
+      "importPath": "./src/App.stories.tsx",
+      "tags": ["story"]
+    },
+    "components-addfield-addfield--add-field-basic-example": {
+      "type": "story",
+      "id": "components-addfield-addfield--add-field-basic-example",
+      "name": "Add Field Basic Example",
+      "title": "components/addField/AddField",
+      "importPath": "./src/components/addField/AddField.stories.tsx",
+      "tags": ["story"]
+    },
+    "components-appbarcomponent-appbarcomponents--app-bar-component-basic-example": {
+      "type": "story",
+      "id": "components-appbarcomponent-appbarcomponents--app-bar-component-basic-example",
+      "name": "App Bar Component Basic Example",
+      "title": "components/appBarComponent/AppBarComponents",
+      "importPath": "./src/components/appBarComponent/AppBarComponents.stories.tsx",
+      "tags": ["story"]
+    },
+    "components-checkboks-checkbox--check-box-basic-example": {
+      "type": "story",
+      "id": "components-checkboks-checkbox--check-box-basic-example",
+      "name": "Check Box Basic Example",
+      "title": "components/checkBoks/Checkbox",
+      "importPath": "./src/components/checkBoks/Checkbox.stories.tsx",
+      "tags": ["story"]
+    },
+    "components-editablespan-editablespan--editable-span-basic-example": {
+      "type": "story",
+      "id": "components-editablespan-editablespan--editable-span-basic-example",
+      "name": "Editable Span Basic Example",
+      "title": "components/editableSpan/EditableSpan",
+      "importPath": "./src/components/editableSpan/EditableSpan.stories.tsx",
+      "tags": ["story"]
+    },
+    "components-filterbutton-filterbutton--filter-button-basic-example": {
+      "type": "story",
+      "id": "components-filterbutton-filterbutton--filter-button-basic-example",
+      "name": "Filter Button Basic Example",
+      "title": "components/filterButton/FilterButton",
+      "importPath": "./src/components/filterButton/FilterButton.stories.tsx",
+      "tags": ["story"]
+    },
+    "components-todotask-todotask--todo-task-basic-example": {
+      "type": "story",
+      "id": "components-todotask-todotask--todo-task-basic-example",
+      "name": "Todo Task Basic Example",
+      "title": "components/todoTask/TodoTask",
+      "importPath": "./src/components/todoTask/TodoTask.stories.tsx",
+      "tags": ["story"]
+    },
+    "components-todolist-todolist--todolist-basic-example": {
+      "type": "story",
+      "id": "components-todolist-todolist--todolist-basic-example",
+      "name": "Todolist Basic Example",
+      "title": "components/todolist/Todolist",
+      "importPath": "./src/components/todolist/Todolist.stories.tsx",
+      "tags": ["story"]
+    },
+    "example-button--docs": {
+      "id": "example-button--docs",
+      "title": "Example/Button",
+      "name": "Docs",
+      "importPath": "./src/stories/Button.stories.ts",
+      "type": "docs",
+      "tags": ["autodocs", "docs"],
+      "storiesImports": []
+    },
+    "example-button--primary": {
+      "type": "story",
+      "id": "example-button--primary",
+      "name": "Primary",
+      "title": "Example/Button",
+      "importPath": "./src/stories/Button.stories.ts",
+      "tags": ["autodocs", "story"]
+    },
+    "example-button--secondary": {
+      "type": "story",
+      "id": "example-button--secondary",
+      "name": "Secondary",
+      "title": "Example/Button",
+      "importPath": "./src/stories/Button.stories.ts",
+      "tags": ["autodocs", "story"]
+    },
+    "example-button--large": {
+      "type": "story",
+      "id": "example-button--large",
+      "name": "Large",
+      "title": "Example/Button",
+      "importPath": "./src/stories/Button.stories.ts",
+      "tags": ["autodocs", "story"]
+    },
+    "example-button--small": {
+      "type": "story",
+      "id": "example-button--small",
+      "name": "Small",
+      "title": "Example/Button",
+      "importPath": "./src/stories/Button.stories.ts",
+      "tags": ["autodocs", "story"]
+    },
+    "example-header--docs": {
+      "id": "example-header--docs",
+      "title": "Example/Header",
+      "name": "Docs",
+      "importPath": "./src/stories/Header.stories.ts",
+      "type": "docs",
+      "tags": ["autodocs", "docs"],
+      "storiesImports": []
+    },
+    "example-header--logged-in": {
+      "type": "story",
+      "id": "example-header--logged-in",
+      "name": "Logged In",
+      "title": "Example/Header",
+      "importPath": "./src/stories/Header.stories.ts",
+      "tags": ["autodocs", "story"]
+    },
+    "example-header--logged-out": {
+      "type": "story",
+      "id": "example-header--logged-out",
+      "name": "Logged Out",
+      "title": "Example/Header",
+      "importPath": "./src/stories/Header.stories.ts",
+      "tags": ["autodocs", "story"]
+    },
+    "example-page--logged-out": {
+      "type": "story",
+      "id": "example-page--logged-out",
+      "name": "Logged Out",
+      "title": "Example/Page",
+      "importPath": "./src/stories/Page.stories.ts",
+      "tags": ["story"]
+    },
+    "example-page--logged-in": {
+      "type": "story",
+      "id": "example-page--logged-in",
+      "name": "Logged In",
+      "title": "Example/Page",
+      "importPath": "./src/stories/Page.stories.ts",
+      "tags": ["play-fn", "story"]
+    },
+    "api-tasks--get-task": {
+      "type": "story",
+      "id": "api-tasks--get-task",
+      "name": "Get Task",
+      "title": "API TASKS",
+      "importPath": "./src/stories/Tasks.stories.tsx",
+      "tags": ["story"]
+    },
+    "api-tasks--create-task": {
+      "type": "story",
+      "id": "api-tasks--create-task",
+      "name": "Create Task",
+      "title": "API TASKS",
+      "importPath": "./src/stories/Tasks.stories.tsx",
+      "tags": ["story"]
+    },
+    "api-tasks--delete-task": {
+      "type": "story",
+      "id": "api-tasks--delete-task",
+      "name": "Delete Task",
+      "title": "API TASKS",
+      "importPath": "./src/stories/Tasks.stories.tsx",
+      "tags": ["story"]
+    },
+    "api-tasks--update-task": {
+      "type": "story",
+      "id": "api-tasks--update-task",
+      "name": "Update Task",
+      "title": "API TASKS",
+      "importPath": "./src/stories/Tasks.stories.tsx",
+      "tags": ["story"]
+    },
+    "api-todolist--get-todolists": {
+      "type": "story",
+      "id": "api-todolist--get-todolists",
+      "name": "Get Todolists",
+      "title": "API TODOLIST",
+      "importPath": "./src/stories/TodolistAPI.stories.tsx",
+      "tags": ["story"]
+    },
+    "api-todolist--create-todolist": {
+      "type": "story",
+      "id": "api-todolist--create-todolist",
+      "name": "Create Todolist",
+      "title": "API TODOLIST",
+      "importPath": "./src/stories/TodolistAPI.stories.tsx",
+      "tags": ["story"]
+    },
+    "api-todolist--delete-todolist": {
+      "type": "story",
+      "id": "api-todolist--delete-todolist",
+      "name": "Delete Todolist",
+      "title": "API TODOLIST",
+      "importPath": "./src/stories/TodolistAPI.stories.tsx",
+      "tags": ["story"]
+    },
+    "api-todolist--update-todolist": {
+      "type": "story",
+      "id": "api-todolist--update-todolist",
+      "name": "Update Todolist",
+      "title": "API TODOLIST",
+      "importPath": "./src/stories/TodolistAPI.stories.tsx",
+      "tags": ["story"]
+    }
+  }
+}

@@ -4,12 +4,12 @@ import {
   TaskStatuses,
   TodoTasksType,
 } from "../type.ts";
-import { UpdatePutTaskType } from "../../api/commonAPI.ts";
+import { TaskType, UpdatePutTaskType } from "../../api/commonAPI.ts";
 import { tasksAPI } from "../../api/tasksAPI.ts";
 import { changeStatusLoadingAC } from "../app/appReducer.ts";
 import { errorMessageOnDataRetrieval } from "../../api/errorMessageOnDataRetrieval.ts";
 import { errorWithStatus200 } from "../../api/errorWithStatus200.ts";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { clearTasksAndTodolists } from "../commonActions.ts";
 import {
   createTodolistTC,
@@ -17,87 +17,80 @@ import {
   getTodolistsTC,
 } from "../todolists/todolistReducer.ts";
 import { RootState } from "../store.ts";
+import { createAppAsyncThunk } from "../../utils/createAppAsyncThunk.ts";
+import { thunkTryCatch } from "./handleAsyncThunk.ts";
 
 const initialState: TodoTasksType = {};
 
-export const getTasksTC = createAsyncThunk(
-  "task/getTasksTC",
-  async (id: string, thunkAPI) => {
+export const getTasksTC = createAppAsyncThunk<
+  { idTodo: string; data: TaskType[] },
+  string
+>("task/getTasksTC", async (id, thunkAPI) => {
+  thunkAPI.dispatch(
+    changeStatusLoadingAC({ statusLoading: StatusLoading.loading }),
+  );
+  try {
+    const result = await tasksAPI.getTasks(id);
     thunkAPI.dispatch(
-      changeStatusLoadingAC({ statusLoading: StatusLoading.loading }),
+      changeStatusLoadingAC({ statusLoading: StatusLoading.succeeded }),
     );
-    try {
-      const result = await tasksAPI.getTasks(id);
+    return { idTodo: id, data: result.items };
+  } catch (error: unknown) {
+    thunkAPI.dispatch(
+      changeStatusLoadingAC({ statusLoading: StatusLoading.failed }),
+    );
+    return thunkAPI.rejectWithValue(
+      errorMessageOnDataRetrieval(error, thunkAPI.dispatch),
+    );
+  }
+});
+
+export const deleteTaskTC = createAppAsyncThunk<
+  { idTodo: string; idTask: string },
+  { idTodo: string; idTask: string }
+>("task/deleteTaskTC", async (data, thunkAPI) => {
+  thunkAPI.dispatch(
+    changeStatusLoadingAC({ statusLoading: StatusLoading.loading }),
+  );
+  try {
+    const result = await tasksAPI.deleteTask(data.idTodo, data.idTask);
+    if (result.resultCode === 0) {
       thunkAPI.dispatch(
         changeStatusLoadingAC({ statusLoading: StatusLoading.succeeded }),
       );
-      return { idTodo: id, data: result.items };
-    } catch (error: unknown) {
-      thunkAPI.dispatch(
-        changeStatusLoadingAC({ statusLoading: StatusLoading.failed }),
-      );
-      return thunkAPI.rejectWithValue(
-        errorMessageOnDataRetrieval(error, thunkAPI.dispatch),
-      );
+      return { idTodo: data.idTodo, idTask: data.idTask };
     }
-  },
-);
-
-export const deleteTaskTC = createAsyncThunk(
-  "task/deleteTaskTC",
-  async (data: { idTodo: string; idTask: string }, thunkAPI) => {
-    thunkAPI.dispatch(
-      changeStatusLoadingAC({ statusLoading: StatusLoading.loading }),
+    return thunkAPI.rejectWithValue(
+      errorWithStatus200(result, thunkAPI.dispatch),
     );
-    try {
-      const result = await tasksAPI.deleteTask(data.idTodo, data.idTask);
-      if (result.resultCode === 0) {
-        thunkAPI.dispatch(
-          changeStatusLoadingAC({ statusLoading: StatusLoading.succeeded }),
-        );
-        return { idTodo: data.idTodo, idTask: data.idTask };
-      }
-      return thunkAPI.rejectWithValue(
-        errorWithStatus200(result, thunkAPI.dispatch),
-      );
-    } catch (error: unknown) {
-      thunkAPI.dispatch(
-        changeStatusLoadingAC({ statusLoading: StatusLoading.failed }),
-      );
-      return thunkAPI.rejectWithValue(
-        errorMessageOnDataRetrieval(error, thunkAPI.dispatch),
-      );
-    }
-  },
-);
-
-export const createTaskTC = createAsyncThunk(
-  "task/createTaskTC",
-  async (data: { idTodo: string; newTitle: string }, thunkAPI) => {
+  } catch (error: unknown) {
     thunkAPI.dispatch(
-      changeStatusLoadingAC({ statusLoading: StatusLoading.loading }),
+      changeStatusLoadingAC({ statusLoading: StatusLoading.failed }),
     );
-    try {
-      const result = await tasksAPI.createTask(data.idTodo, data.newTitle);
-      if (result.resultCode === 0) {
-        thunkAPI.dispatch(
-          changeStatusLoadingAC({ statusLoading: StatusLoading.succeeded }),
-        );
-        return { data: result.data.item };
-      }
-      return thunkAPI.rejectWithValue(
-        errorWithStatus200(result, thunkAPI.dispatch),
-      );
-    } catch (error: unknown) {
+    return thunkAPI.rejectWithValue(
+      errorMessageOnDataRetrieval(error, thunkAPI.dispatch),
+    );
+  }
+});
+
+export const createTaskTC = createAppAsyncThunk<
+  { data: TaskType },
+  { idTodo: string; newTitle: string }
+>("task/createTaskTC", async (data, thunkAPI) => {
+  return thunkTryCatch(thunkAPI, async () => {
+    const result = await tasksAPI.createTask(data.idTodo, data.newTitle);
+    if (result.resultCode === 0) {
       thunkAPI.dispatch(
-        changeStatusLoadingAC({ statusLoading: StatusLoading.failed }),
+        changeStatusLoadingAC({ statusLoading: StatusLoading.succeeded }),
       );
-      return thunkAPI.rejectWithValue(
-        errorMessageOnDataRetrieval(error, thunkAPI.dispatch),
-      );
+      return { data: result.data.item };
     }
-  },
-);
+    return thunkAPI.rejectWithValue(
+      errorWithStatus200(result, thunkAPI.dispatch),
+    );
+  });
+  //
+});
 
 export type UpdateTaskType = {
   title?: string;
@@ -108,53 +101,50 @@ export type UpdateTaskType = {
   deadline?: null | string;
 };
 
-export const updateTaskTC = createAsyncThunk(
-  "task/updateTaskTC",
-  async (
-    data: { idTodo: string; idTask: string; modelTask: UpdateTaskType },
-    thunkAPI,
-  ) => {
-    thunkAPI.dispatch(
-      changeStatusLoadingAC({ statusLoading: StatusLoading.loading }),
-    );
-    try {
-      const state = thunkAPI.getState() as RootState;
-      const tasks = state.tasks[data.idTodo];
-      const task = tasks.find((t) => t.id === data.idTask);
-      if (!task) {
-        console.warn("tasks are empty");
-        return;
-      }
-      const model: UpdatePutTaskType = {
-        title: task.title,
-
-        description: task.description,
-        status: task.status,
-        priority: task.priority,
-        startDate: task.startDate,
-        deadline: task.deadline,
-        ...data.modelTask,
-      };
-      const result = await tasksAPI.updateTask(data.idTodo, data.idTask, model);
-      if (result.resultCode === 0) {
-        thunkAPI.dispatch(
-          changeStatusLoadingAC({ statusLoading: StatusLoading.succeeded }),
-        );
-        return { task: result.data.item };
-      }
-      return thunkAPI.rejectWithValue(
-        errorWithStatus200(result, thunkAPI.dispatch),
-      );
-    } catch (error: unknown) {
-      thunkAPI.dispatch(
-        changeStatusLoadingAC({ statusLoading: StatusLoading.failed }),
-      );
-      return thunkAPI.rejectWithValue(
-        errorMessageOnDataRetrieval(error, thunkAPI.dispatch),
-      );
+export const updateTaskTC = createAppAsyncThunk<
+  { task: TaskType } | undefined,
+  { idTodo: string; idTask: string; modelTask: UpdateTaskType }
+>("task/updateTaskTC", async (data, thunkAPI) => {
+  thunkAPI.dispatch(
+    changeStatusLoadingAC({ statusLoading: StatusLoading.loading }),
+  );
+  try {
+    const state = thunkAPI.getState() as RootState;
+    const tasks = state.tasks[data.idTodo];
+    const task = tasks.find((t) => t.id === data.idTask);
+    if (!task) {
+      console.warn("tasks are empty");
+      return;
     }
-  },
-);
+    const model: UpdatePutTaskType = {
+      title: task.title,
+
+      description: task.description,
+      status: task.status,
+      priority: task.priority,
+      startDate: task.startDate,
+      deadline: task.deadline,
+      ...data.modelTask,
+    };
+    const result = await tasksAPI.updateTask(data.idTodo, data.idTask, model);
+    if (result.resultCode === 0) {
+      thunkAPI.dispatch(
+        changeStatusLoadingAC({ statusLoading: StatusLoading.succeeded }),
+      );
+      return { task: result.data.item };
+    }
+    return thunkAPI.rejectWithValue(
+      errorWithStatus200(result, thunkAPI.dispatch),
+    );
+  } catch (error: unknown) {
+    thunkAPI.dispatch(
+      changeStatusLoadingAC({ statusLoading: StatusLoading.failed }),
+    );
+    return thunkAPI.rejectWithValue(
+      errorMessageOnDataRetrieval(error, thunkAPI.dispatch),
+    );
+  }
+});
 
 const tasksSlice = createSlice({
   name: "task",
