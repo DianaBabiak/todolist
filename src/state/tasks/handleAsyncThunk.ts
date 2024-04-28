@@ -2,8 +2,10 @@ import { AppDispatch, RootState } from "../store.ts";
 import { changeStatusLoadingAC } from "../app/appReducer.ts";
 import { StatusLoading } from "../type.ts";
 import { errorMessageOnDataRetrieval } from "../../api/errorMessageOnDataRetrieval.ts";
-import { BaseThunkAPI } from "@reduxjs/toolkit/dist/createAsyncThunk";
 import { CommonAPIType } from "../../api/commonAPI.ts";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+import { BaseThunkAPI } from "@reduxjs/toolkit/dist/createAsyncThunk";
 
 export const thunkTryCatch = async <T>(
   thunkAPI: BaseThunkAPI<RootState, unknown, AppDispatch, null | CommonAPIType>,
