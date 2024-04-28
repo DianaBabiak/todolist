@@ -10,6 +10,7 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   },
 );
+
 export function ErrorMessage() {
   const errorMessage = useAppSelector(({ app }) => app.errorMessage);
   const dispatch = useAppDispatch();
