@@ -9,8 +9,13 @@ import { CommonAPIType } from "./commonAPI.ts";
 export const errorWithStatus200 = (
   result: CommonAPIType,
   dispatch: Dispatch,
+  isNotShow?: boolean,
 ) => {
-  if (result.messages.length) {
+  if (isNotShow) {
+    dispatch(changeStatusLoadingAC({ statusLoading: StatusLoading.failed }));
+    return "";
+  }
+  if (result?.messages.length) {
     dispatch(changeErrorMessageAC({ errorMessage: result.messages[0] }));
     dispatch(changeStatusLoadingAC({ statusLoading: StatusLoading.failed }));
     return result.messages[0];

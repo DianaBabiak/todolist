@@ -42,7 +42,7 @@ export const getAuthTC = createAppAsyncThunk(
         return result.data;
       }
       return thunkAPI.rejectWithValue(
-        errorWithStatus200(result, thunkAPI.dispatch),
+        errorWithStatus200(result, thunkAPI.dispatch, true),
       );
     } catch (error: unknown) {
       thunkAPI.dispatch(

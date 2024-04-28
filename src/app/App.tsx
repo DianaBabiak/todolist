@@ -19,6 +19,7 @@ function App({ demo = false }: AppProps) {
   const statusLoading = useAppSelector(({ app }) => app.statusLoading);
   const initialization = useAppSelector(({ app }) => app.initialization);
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     if (!demo) {
       dispatch(getAuthTC());
