@@ -1,27 +1,24 @@
-# React + TypeScript + Vite
+# Check Flow
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Check Flow is a project that offers a user-friendly interface for managing tasks and to-do lists, including functionalities for creating, editing, deleting, and displaying tasks.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Task Management:** Create, edit, delete, and display tasks and to-do lists.
+- **User-Friendly Interface:** Designed for intuitive task management.
+- **Form Handling:** Uses Formik for managing forms and form validation.
+- **State Management:** Utilizes Redux Toolkit for efficient state management.
+- **Testing:** Includes Jest for unit testing.
+- **Routing:** Uses React Router Dom for navigation between different views.
+- **Component Library:** Includes Storybook for UI component development and testing.
 
-## Expanding the ESLint configuration
+## Technology Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- **Vite:** Frontend build tool that provides fast refresh and great development experience.
+- **React:** Frontend framework for building the user interface.
+- **TypeScript:** Programming language for type-checking and improved developer experience.
+- **Formik:** Library for building forms and form validations in React.
+- **Redux Toolkit:** State management library for predictable state containers.
+- **Jest:** JavaScript testing framework for unit testing.
+- **React Router Dom:** Library for declarative routing in React applications.
+- **Storybook:** Development environment for UI components.
